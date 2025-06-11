@@ -58,10 +58,12 @@ function page() {
                     className="hidden"
                     onChange={handleFileChange}
                   />
+                  {/* Label to trigger file input */}
                   <label htmlFor="profilePhoto" className="mt-2 text-sm text-gray-400 cursor-pointer hover:text-violet-400">
                     Choose Profile Photo
                   </label>
                 </div>
+                {/* Input fields for email and passwords */}
                 <div className="rounded-md shadow-sm">
                   <div>
                     <label className="sr-only" htmlFor="email">Email address</label>
@@ -75,13 +77,23 @@ function page() {
                       id="email"
                     />
                   </div>
+                    <div className="mt-4">
+                    <label className="sr-only" htmlFor="password">Username</label>
+                    <input
+                      placeholder="Username"
+                      className="appearance-none relative block w-full px-3 py-3 border border-gray-700 bg-gray-700 text-white rounded-md focus:outline-none focus:ring-violet-500 focus:border-violet-500 focus:z-10 sm:text-sm"
+                      required={true}
+                      type="text"
+                      name="username"
+                      id="username"
+                    />
+                  </div>
                   <div className="mt-4">
                     <label className="sr-only" htmlFor="password">Password</label>
                     <input
                       placeholder="Password"
                       className="appearance-none relative block w-full px-3 py-3 border border-gray-700 bg-gray-700 text-white rounded-md focus:outline-none focus:ring-violet-500 focus:border-violet-500 focus:z-10 sm:text-sm"
                       required={true}
-                      autoComplete="current-password"
                       type="password"
                       name="password"
                       id="password"
@@ -99,6 +111,7 @@ function page() {
                     />
                   </div>
                 </div>
+                {/* Submit button */}
                 <div>
                   <button
                     className="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-md text-gray-900 bg-violet-500 hover:bg-violet-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-violet-500"
@@ -109,6 +122,7 @@ function page() {
                 </div>
               </form>
             </div>
+            {/* Footer with link to login page */}
             <div className="px-8 py-4 bg-gray-700 text-center">
               <span className="text-gray-400">Already have an account?</span>
               <Link className="font-medium text-violet-500 hover:text-violet-400" href="/login">Sign in</Link>

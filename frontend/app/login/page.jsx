@@ -42,7 +42,6 @@ function Page() {
                     placeholder="Password"
                     className="appearance-none relative block w-full px-3 py-3 border border-gray-700 bg-gray-700 text-white rounded-md focus:outline-none focus:ring-violet-500 focus:border-violet-500 focus:z-10 sm:text-sm"
                     required={true}
-                    autoComplete="current-password"
                     type="password"
                     name="password"
                     id="password"
