@@ -25,12 +25,12 @@ function page() {
           {/* Card container with shadow */}
           <div
             style={{ boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)' }}
-            className="bg-gray-800 rounded-lg shadow-xl overflow-hidden"
+            className="bg-gray-800 rounded-lg shadow-l overflow-hidden"
           >
             <div className="p-8">
               {/* Title and subtitle */}
               <h2 className="text-center text-3xl font-extrabold text-white">
-                Welcome Back
+                Welcome 
               </h2>
               <p className="mt-4 text-center text-gray-400">Sign in to continue</p>
               {/* Registration form */}
@@ -39,7 +39,7 @@ function page() {
                 <div className="flex flex-col items-center mb-4">
                   <div
                     className="w-24 h-24 rounded-full bg-gray-700 flex items-center justify-center overflow-hidden cursor-pointer border-2 border-violet-500"
-                    onClick={() => fileInputRef.current.click()}
+                    onClick={() => fileInputRef.current.click()} 
                   >
                     {/* Show image preview if selected, else prompt */}
                     {preview ? (
@@ -57,9 +57,10 @@ function page() {
                     ref={fileInputRef}
                     className="hidden"
                     onChange={handleFileChange}
+                    required={true}
                   />
                   {/* Label to trigger file input */}
-                  <label htmlFor="profilePhoto" className="mt-2 text-sm text-gray-400 cursor-pointer hover:text-violet-400">
+                  <label htmlFor="profilePhoto" className="mt-2 text-sm text-gray-400 cursor-pointer hover:text-violet-400" required={true}>
                     Choose Profile Photo
                   </label>
                 </div>
