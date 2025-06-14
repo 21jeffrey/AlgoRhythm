@@ -3,10 +3,12 @@ export default {
   content: [
     "./app/**/*.{js,ts,jsx,tsx}",
     "./pages/**/*.{js,ts,jsx,tsx}",
+    "./src/**/*.{html,js,jsx,ts,tsx}",
     // add any other folders you use
   ],
   theme: {
     extend: {},
   },
   plugins: [],
+  
 }
