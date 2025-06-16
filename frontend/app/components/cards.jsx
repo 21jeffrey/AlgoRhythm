@@ -1,5 +1,5 @@
  import React from "react";
- import Single from '../assets/single.png';
+ import Single from '../assets/singleuser.png';
 
 
 
