@@ -6,7 +6,7 @@ import Cards from './components/cards';
 
 function page() {
   return (
-    <div >
+    <div className='bg-black'>
       <Navbar/>
       <Hero/>
       <Features/>
