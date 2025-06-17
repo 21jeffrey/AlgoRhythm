@@ -1,5 +1,5 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
@@ -10,8 +10,9 @@ function Page() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
-  const [authToken, setAuthToken] = useState(null);
   const router = useRouter();
+
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -25,7 +26,6 @@ function Page() {
 
       if (response.data.status) {
         Cookies.set('token', response.data.token, { expires: 7 });
-        setAuthToken(response.data.token);
         toast.success("Login successful");
         setTimeout(() => {
           router.push('/dashboard');

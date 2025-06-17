@@ -1,7 +1,9 @@
+'use client';
 import './globals.css'
+import { Toaster } from 'react-hot-toast';
 
  
-export const metadata = {
+const metadata = {
   title: 'AlgoRhythm',
   description: 'A platform for coding and algorithm challenges',
 }
@@ -13,7 +15,10 @@ export default function RootLayout({ children }) {
   <link rel="icon" href="/favicon.ico" type="image/x-icon" />
 </head>
 
-      <body>{children}</body>
+      <body>
+        <Toaster position="top-center" reverseOrder={false} />
+        {children}
+        </body>
     </html>
   )
 }
