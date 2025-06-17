@@ -91,7 +91,7 @@ function Page() {
 
               <div className="flex items-center justify-between mt-4">
                 <div className="text-sm">
-                  <Link className="font-medium text-purple-500 hover:text-purple-400" href="#">
+                  <Link className="font-medium text-purple-500 hover:text-purple-400" href="/forgot-password">
                     Forgot your password?
                   </Link>
                 </div>

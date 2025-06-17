@@ -7,7 +7,6 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Auth\Notifications\ResetPassword;
 
-
 class ResetPasswordNotification extends ResetPassword
 {
     use Queueable;
@@ -34,14 +33,18 @@ class ResetPasswordNotification extends ResetPassword
     /**
      * Get the mail representation of the notification.
      */
-     public function toMail($notifiable)
-    {
-        return (new MailMessage)
-            ->subject('Reset Your AlgoRhythm Password')
-            ->line('You requested a password reset.')
-            ->action('Reset Password', url(config('app.url') . '/reset-password?token=' . $this->token))
-            ->line('If you didn’t request this, ignore this email.');
-    }
+public function toMail($notifiable)
+{
+    $frontendUrl = config('app.frontend_url', 'http://localhost:3000'); // fallback if env not set
+    return (new MailMessage)
+        ->subject('Reset Your AlgoRhythm Password')
+        ->line('You requested a password reset.')
+        ->action(
+            'Reset Password',
+            "{$frontendUrl}/reset-password?token={$this->token}&email={$notifiable->getEmailForPasswordReset()}"
+        )
+        ->line('If you didn’t request this, ignore this email.');
+}
 
  
 }
