@@ -6,7 +6,7 @@ import Contacts from './components/Contacts';
 
 function page() {
   return (
-    <div >
+    <div className='bg-black'>
       <Navbar/>
       <Hero/>
       <Features/>

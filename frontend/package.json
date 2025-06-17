@@ -12,16 +12,20 @@
     "@apollo/client": "^3.13.8",
     "@lottiefiles/react-lottie-player": "^3.6.0",
     "aos": "^2.3.4",
+    "axios": "^1.10.0",
     "framer-motion": "^12.18.1",
     "graphql": "^16.11.0",
     "gsap": "^3.13.0",
+    "js-cookie": "^3.0.5",
     "lottie-react": "^2.4.1",
     "next": "^15.3.3",
     "ogl": "^1.0.11",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "react-hot-toast": "^2.5.2",
     "react-icons": "^5.5.0",
-    "react-typed": "^2.0.12"
+    "react-typed": "^2.0.12",
+    "sweetalert2": "^11.22.0"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.1.8",
