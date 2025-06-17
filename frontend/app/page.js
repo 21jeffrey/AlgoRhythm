@@ -2,7 +2,7 @@ import React from 'react'
 import Navbar from './components/navbar';
 import Hero from './components/Hero';
 import Features from './components/Features';
-import Cards from './components/cards';
+import Contacts from './components/Contacts';
 
 function page() {
   return (
@@ -10,8 +10,7 @@ function page() {
       <Navbar/>
       <Hero/>
       <Features/>
-      <Cards/>
-
+      <Contacts/>
         </div>
   )
 }
