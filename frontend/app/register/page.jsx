@@ -38,7 +38,7 @@ function page() {
     }
 
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/register`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}api/register`, {
         method: 'POST',
         body: formData,
       });

@@ -59,7 +59,7 @@ export default function ResetPasswordPage() {
     <div className='flex items-center justify-center min-h-screen bg-gradient-to-l from-purple-500 to-violet-900'>
       <div className="max-w-lg w-full">
         <div className="bg-gray-800 p-8 rounded-lg shadow-lg">
-          <h2 className="text-white text-center text-xl mb-6">Reset Your Password</h2>
+          <h2 className="text-gray-400 text-center text-xl mb-6">Reset Your Password</h2>
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
               <input
@@ -84,7 +84,7 @@ export default function ResetPasswordPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-3 rounded-md bg-violet-500 text-white font-semibold hover:bg-violet-600 transition duration-200"
+              className="w-full py-3 rounded-md bg-violet-500 text-gray-900 font-semibold hover:bg-violet-600 transition duration-200"
             >
               {loading ? 'Resetting...' : 'Reset Password'}
             </button>
