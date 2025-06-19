@@ -5,6 +5,7 @@ import Header from '../components/Header';
 import Cookies from 'js-cookie';
 import toast from 'react-hot-toast';
 
+
 function page() {
     const router = useRouter();
 
@@ -22,9 +23,6 @@ function page() {
 
     <div className='bg-white'>
           <Header />
-        <h1 className='text-3xl font-bold text-center mt-10 '>Dashboard</h1>
-        <p className='text-center mt-4'>This is the dashboard page where you can manage your account and settings.</p>
-
     </div>
   )
 }
