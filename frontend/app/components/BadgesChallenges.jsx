@@ -159,21 +159,21 @@ const BadgesChallenges = () => {
                 waiting to test your skills and improve your problem-solving abilities.
               </p>
               <div className="space-y-4">
-                <div className="flex items-center p-3 bg-gray-800 rounded-lg border border-green-500">
+                <div className="flex items-center p-3 bg-gray-800 rounded-lg border border-green-500 transition duration-300 cursor-pointer hover:scale-105 hover:shadow-lg hover:border-green-400 hover:bg-green-950/30">
                   <div className="w-4 h-4 bg-green-500 rounded-full mr-4"></div>
                   <div>
                     <span className="text-gray-300 font-semibold">Easy</span>
                     <p className="text-sm text-gray-400">Perfect for beginners</p>
                   </div>
                 </div>
-                <div className="flex items-center p-3 bg-gray-800 rounded-lg border border-yellow-500">
+                <div className="flex items-center p-3 bg-gray-800 rounded-lg border border-yellow-500 transition duration-300 cursor-pointer hover:scale-105 hover:shadow-lg hover:border-yellow-400 hover:bg-yellow-900/20">
                   <div className="w-4 h-4 bg-yellow-500 rounded-full mr-4"></div>
                   <div>
                     <span className="text-gray-300 font-semibold">Medium</span>
                     <p className="text-sm text-gray-400">For intermediate coders</p>
                   </div>
                 </div>
-                <div className="flex items-center p-3 bg-gray-800 rounded-lg border border-purple-500">
+                <div className="flex items-center p-3 bg-gray-800 rounded-lg border border-purple-500 transition duration-300 cursor-pointer hover:scale-105 hover:shadow-lg hover:border-purple-400 hover:bg-purple-900/30">
                   <div className="w-4 h-4 bg-purple-500 rounded-full mr-4"></div>
                   <div>
                     <span className="text-gray-300 font-semibold">Hard</span>
