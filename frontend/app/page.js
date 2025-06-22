@@ -6,12 +6,12 @@ import Contacts from './components/Contacts';
 
 function page() {
   return (
-    <div className='bg-black'>
+    <main className="scroll-smooth bg-black text-white">
       <Navbar/>
-      <Hero/>
-      <Features/>
-      <Contacts/>
-        </div>
+      <Hero />
+      <Features />
+      <Contacts />
+    </main>
   )
 }
 

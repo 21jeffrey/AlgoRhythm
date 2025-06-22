@@ -3,9 +3,14 @@
 import React, { useEffect } from "react";
 import AOS from "aos";
 import "aos/dist/aos.css";
-import { Player } from "@lottiefiles/react-lottie-player";
 import ShinyText from "@/public/TextAnimations/ShinyText/ShinyText";
 import Aurora from "@/public/Backgrounds/Aurora/Aurora";
+import dynamic from "next/dynamic";
+
+const Player = dynamic(
+  () => import("@lottiefiles/react-lottie-player").then((mod) => mod.Player),
+  { ssr: false }
+);
 
 const Features = () => {
   useEffect(() => {
@@ -23,11 +28,11 @@ const Features = () => {
       {/* ✅ Aurora Background that covers entire section */}
       <div className="absolute inset-0 z-0">
         <Aurora
-          colorStops={["#310347"]} // dark + light purple
-          blend={0.6}
-          amplitude={1.0}
-          speed={0.5}
-        />
+  colorStops={["#530C73", "#63126E", "#7B248F", "#A64DBD"]}
+  blend={0.84}
+  amplitude={0.6} // increased for more visible movement
+  speed={1.5} // increased to match Silk motion
+/>
       </div>
 
       {/* ✅ Foreground Content */}

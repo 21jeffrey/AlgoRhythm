@@ -3,8 +3,8 @@
 import React, { useEffect } from "react";
 import AOS from "aos";
 import "aos/dist/aos.css";
-import Particles from "@/public/Backgrounds/Particles/Particles";
 import { FaGithub, FaLinkedin, FaTwitter, FaInstagram } from "react-icons/fa";
+import Particles from "@/public/Backgrounds/Particles/Particles";
 
 const Contacts = () => {
   useEffect(() => {
