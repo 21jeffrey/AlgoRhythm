@@ -90,11 +90,6 @@ function Page() {
               </div>
 
               <div className="flex items-center justify-between mt-4">
-                <div className="text-sm">
-                  <Link className="font-medium text-purple-500 hover:text-purple-400" href="/forgot-password">
-                    Forgot your password?
-                  </Link>
-                </div>
               </div>
 
               <div>
@@ -109,12 +104,7 @@ function Page() {
             </form>
           </div>
 
-          <div className="px-8 py-4 bg-gray-700 text-center">
-            <span className="text-gray-400">Don't have an account? </span>
-            <Link className="font-medium text-violet-500 hover:text-violet-400" href="/register">
-              Sign up
-            </Link>
-          </div>
+          
         </div>
       </div>
     </div>

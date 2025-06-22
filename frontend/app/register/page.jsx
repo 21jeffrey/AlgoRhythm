@@ -2,6 +2,7 @@
 import React, { useRef, useState } from 'react'
 import Link from 'next/link';
 import Swal from 'sweetalert2';
+import { useRouter } from 'next/navigation';
 
 function page() {
   const fileInputRef = useRef(null);
@@ -13,6 +14,7 @@ function page() {
   const [password, setPassword] = useState('');
   const [confirmpassword, setConfirmpassword] = useState('');
   const [loading, setLoading] = useState(false);
+  const router = useRouter();
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
@@ -36,7 +38,7 @@ function page() {
     }
 
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/register`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}api/register`, {
         method: 'POST',
         body: formData,
       });
@@ -53,6 +55,7 @@ function page() {
         setConfirmpassword('');
         setAvatarImage(null);
         setPreview(null);
+        router.push('/login'); 
       } else {
         const data = await res.json();
         const errorMessages = Object.values(data.errors || {})

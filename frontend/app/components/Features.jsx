@@ -3,6 +3,7 @@
 import React, { useEffect } from "react";
 import AOS from "aos";
 import "aos/dist/aos.css";
+import dynamic from "next/dynamic";
 import ShinyText from "@/public/TextAnimations/ShinyText/ShinyText";
 import Aurora from "@/public/Backgrounds/Aurora/Aurora";
 import dynamic from "next/dynamic";
@@ -22,6 +23,12 @@ const Features = () => {
       offset: 200,
     });
   }, []);
+
+  const Player = dynamic(
+  () =>
+    import("@lottiefiles/react-lottie-player").then((mod) => mod.Player),
+  { ssr: false }
+);
 
   return (
     <div className="relative w-full bg-black text-white py-20 px-4 overflow-hidden">
