@@ -38,7 +38,7 @@ const Navbar = () => {
       hover:scale-105 active:scale-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-purple-500`;
 
   return (
-    <div className="flex justify-between items-center h-24 max-w-[1240px] mx-auto px-4 text-white bg-black">
+    <div className="flex justify-between items-center h-24 w-full px-4 text-white bg-black" style={{backgroundColor: '#000'}}>
       <h1 className="text-3xl font-bold text-[#2d0f4a] select-none">ALGO.</h1>
       <ul className="hidden md:flex flex-row items-center space-x-2">
         <li>
@@ -68,6 +68,7 @@ const Navbar = () => {
             ? "fixed left-0 top-0 w-[60%] h-full border-r border-r-gray-900 bg-black ease-in-out duration-500 z-50 flex flex-col items-center pt-24"
             : "fixed left-[-100%] z-50"
         }
+        style={{backgroundColor: '#000'}}
       >
         <h1 className="text-3xl font-bold text-[#2d0f4a] m-4 select-none">ALGO.</h1>
         <ul className="flex flex-col space-y-6 items-center w-full">
