@@ -3,7 +3,6 @@
 import React, { useEffect } from "react";
 import AOS from "aos";
 import "aos/dist/aos.css";
-import dynamic from "next/dynamic";
 import ShinyText from "@/public/TextAnimations/ShinyText/ShinyText";
 import Aurora from "@/public/Backgrounds/Aurora/Aurora";
 import dynamic from "next/dynamic";
@@ -31,7 +30,7 @@ const Features = () => {
 );
 
   return (
-    <div className="relative w-full bg-black text-white py-20 px-4 overflow-hidden">
+    <div id="features" className="relative w-full bg-black text-white py-20 px-4 overflow-hidden">
       {/* ✅ Aurora Background that covers entire section */}
       <div className="absolute inset-0 z-0">
         <Aurora
@@ -45,14 +44,18 @@ const Features = () => {
       {/* ✅ Foreground Content */}
       <div className="relative z-10 max-w-[1240px] mx-auto">
         {/* Features Title */}
-        <div data-aos="zoom-in" className="mb-12 text-center">
-          <ShinyText
-            text="Features"
-            className="md:text-7xl sm:text-6xl text-4xl font-bold text-white"
-            shinyColor="#fff"
-            shinyDuration={1500}
-            shinyDelay={200}
-          />
+        <div data-aos="zoom-in" className="mb-16 text-center">
+          <h1
+            className="text-5xl md:text-8xl font-extrabold mb-6 bg-gradient-to-r from-purple-400 via-pink-500 to-yellow-400 bg-clip-text text-transparent drop-shadow-[0_2px_24px_rgba(130,0,255,0.7)] animate-pulse"
+            style={{ letterSpacing: '0.05em', lineHeight: 1.1 }}
+          >
+            Features
+          </h1>
+          <div className="flex justify-center items-center gap-4 mt-4">
+            <span className="h-2 w-2 rounded-full bg-purple-400 animate-pulse"></span>
+            <span className="h-2 w-2 rounded-full bg-pink-400 animate-pulse delay-200"></span>
+            <span className="h-2 w-2 rounded-full bg-yellow-400 animate-pulse delay-400"></span>
+          </div>
         </div>
 
         {/* Leaderboard Feature */}
@@ -62,19 +65,14 @@ const Features = () => {
               autoplay
               loop
               src="/lottie/leaderboard.json"
-              style={{ height: "300px", width: "300px" }}
+              style={{ height: "340px", width: "340px" }}
             />
           </div>
           <div data-aos="fade-left">
-            <h3 className="text-3xl font-bold mb-2">Leaderboard</h3>
-            <p className="text-gray-300 mb-4">
+            <h3 className="text-4xl md:text-5xl font-bold mb-4 text-purple-200">Leaderboard</h3>
+            <p className="text-2xl md:text-3xl text-purple-100 mb-4">
               Climb the ranks, beat your friends, and become a top coder.
             </p>
-            <a href="/leaderboard">
-              <button className="bg-blue-600 px-6 py-2 rounded-full hover:bg-blue-700 transition">
-                View Leaderboard
-              </button>
-            </a>
           </div>
         </div>
 
@@ -84,15 +82,10 @@ const Features = () => {
             data-aos="fade-right"
             className="order-2 md:order-1 px-4 md:px-8"
           >
-            <h3 className="text-3xl font-bold mb-2">Friends & Collabs</h3>
-            <p className="text-gray-300 mb-4">
+            <h3 className="text-4xl md:text-5xl font-bold mb-4 text-purple-200">Friends & Collabs</h3>
+            <p className="text-2xl md:text-3xl text-purple-100 mb-4">
               Add friends, solve problems together, and grow as a team.
             </p>
-            <a href="/friends">
-              <button className="bg-green-600 px-6 py-2 rounded-full hover:bg-green-700 transition">
-                Collaborate
-              </button>
-            </a>
           </div>
           <div
             data-aos="fade-left"
@@ -102,7 +95,7 @@ const Features = () => {
               autoplay
               loop
               src="/lottie/friends2.json"
-              style={{ height: "300px", width: "300px" }}
+              style={{ height: "340px", width: "340px" }}
             />
           </div>
         </div>
@@ -114,19 +107,14 @@ const Features = () => {
               autoplay
               loop
               src="/lottie/streak.json"
-              style={{ height: "300px", width: "300px" }}
+              style={{ height: "340px", width: "340px" }}
             />
           </div>
           <div data-aos="fade-left">
-            <h3 className="text-3xl font-bold mb-2">Streaks</h3>
-            <p className="text-gray-300 mb-4">
+            <h3 className="text-4xl md:text-5xl font-bold mb-4 text-purple-200">Streaks</h3>
+            <p className="text-2xl md:text-3xl text-purple-100 mb-4">
               Build a daily problem-solving streak and stay motivated.
             </p>
-            <a href="/streaks">
-              <button className="bg-red-600 px-6 py-2 rounded-full hover:bg-red-700 transition">
-                Track Streak
-              </button>
-            </a>
           </div>
         </div>
       </div>

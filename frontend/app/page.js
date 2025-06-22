@@ -1,15 +1,17 @@
 import React from 'react'
-import Navbar from './components/navbar';
+// import Navbar from './components/navbar';
 import Hero from './components/Hero';
 import Features from './components/Features';
+import BadgesChallenges from './components/BadgesChallenges';
 import Contacts from './components/Contacts';
 
 function page() {
   return (
     <main className="scroll-smooth bg-black text-white">
-      <Navbar/>
+      {/* <Navbar/> */}
       <Hero />
       <Features />
+      <BadgesChallenges />
       <Contacts />
     </main>
   )
