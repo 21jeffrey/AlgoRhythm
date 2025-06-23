@@ -15,22 +15,22 @@ function Adminbar() {
     },
     {
       name: "Challenges",
-      link: "/admin/challenges",
+      link: "/admin/dashboard/challenges",
       icon: AcademicCapIcon,
     },
     {
       name: "Users",
-      link: "/admin/users",
+      link: "/admin/dashboard/users",
       icon: UserGroupIcon,
     },
     {
       name: "Badges",
-      link: "/admin/badges",
+      link: "/admin/dashboard/badges",
       icon: TrophyIcon,
     },
     {
       name: "Analytics",
-      link: "/admin/analytics",
+      link: "/admin/dashboard/analytics",
       icon: ChartBarIcon,
     },
     {
