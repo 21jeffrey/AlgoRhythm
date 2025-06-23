@@ -2,8 +2,10 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { toast } from 'react-hot-toast';
+import { useRouter } from 'next/navigation';
 
 const CreateBadgeForm = () => {
+  const router = useRouter();
   const [formData, setFormData] = useState({
     name: '',
     description: '',
@@ -33,6 +35,7 @@ const CreateBadgeForm = () => {
       });
       toast.success('Badge created!');
       setFormData({ name: '', description: '', threshold_type: 'points', threshold_value: '', image: null });
+      router.push('/admin/dashboard/badges');
     } catch (err) {
       toast.error(err.response?.data?.message || 'Failed to create badge');
     }

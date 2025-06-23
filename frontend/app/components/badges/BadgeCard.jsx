@@ -1,8 +1,37 @@
 'use client';
 import React from 'react';
 import { PencilSquareIcon, TrashIcon } from '@heroicons/react/24/outline';
+import { useRouter } from 'next/navigation';
+import Swal from 'sweetalert2';
+import axios from 'axios';
+import toast from 'react-hot-toast';
+import { useCallback } from 'react';
 
-const BadgeCard = ({ badge }) => {
+const BadgeCard = ({ badge, onDelete }) => {
+    const router = useRouter();
+  const handleDelete = useCallback((id) => {
+    Swal.fire({
+      title: 'Are you sure?',
+      text: 'This action cannot be undone!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: 'Yes, delete it!',
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          await axios.delete(`${process.env.NEXT_PUBLIC_API_URL}api/badges/${id}`);
+          toast.success('Badge deleted successfully');
+          onDelete(id); 
+        } catch (error) {
+          console.error(error);
+          toast.error('Failed to delete badge');
+        }
+      }
+    });
+  }, [onDelete]);
+
     return (
         <div className="card card-side bg-base-100 shadow-sm hover:shadow-[0_10px_15px_rgba(139,92,246,0.4)] transition-shadow duration-300 max-w-2xl p-4">
             <figure className="w-1/3">
@@ -20,11 +49,15 @@ const BadgeCard = ({ badge }) => {
                     <strong>{badge.threshold_type}</strong>: {badge.threshold_value}
                 </span>
                 <div className="card-actions justify-end space-x-2">
-                    <button className="btn btn-sm btn-outline btn-warning flex items-center gap-1">
+                    <button className="btn btn-sm btn-outline btn-warning flex items-center gap-1"
+                    onClick={() => router.push(`/admin/dashboard/badges/${badge.id}/edit`)}
+                    >
                         <PencilSquareIcon className="h-4 w-4" />
                         Edit
                     </button>
-                    <button className="btn btn-sm btn-outline btn-error flex items-center gap-1">
+                    <button className="btn btn-sm btn-outline btn-error flex items-center gap-1"
+                    onClick={() => handleDelete(badge.id)}
+                    >
                         <TrashIcon className="h-4 w-4" />
                         Delete
                     </button>

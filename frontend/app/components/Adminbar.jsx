@@ -4,6 +4,7 @@ import React from 'react';
 import { AcademicCapIcon, ArrowLeftEndOnRectangleIcon, HomeIcon, TrophyIcon, UserGroupIcon, ChartBarIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import Image from 'next/image';
+import {Award} from 'lucide-react';
 
 
 function Adminbar() {
@@ -19,14 +20,14 @@ function Adminbar() {
       icon: AcademicCapIcon,
     },
     {
-      name: "Users",
+      name: "Learners",
       link: "/admin/dashboard/users",
       icon: UserGroupIcon,
     },
     {
       name: "Badges",
       link: "/admin/dashboard/badges",
-      icon: TrophyIcon,
+      icon: Award,
     },
     {
       name: "Analytics",

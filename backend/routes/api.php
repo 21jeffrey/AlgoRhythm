@@ -6,8 +6,10 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Auth\NewPasswordController;
 use App\Http\Controllers\BadgeController;
+use App\Http\Controllers\UserController;
 
 Route::apiResource('badges', BadgeController::class);
+Route::apiResource('users', UserController::class);
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/forgot-password', [PasswordResetLinkController::class, 'store']);

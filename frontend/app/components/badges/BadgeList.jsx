@@ -12,10 +12,14 @@ const BadgeList = () => {
       .catch(err => console.error(err));
   }, []);
 
+   const handleDelete = (id) => {
+    setBadges(prev => prev.filter(b => b.id !== id));
+  };
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
       {badges.map(badge => (
-        <BadgeCard key={badge.id} badge={badge} />
+        <BadgeCard key={badge.id} badge={badge} onDelete={handleDelete} />
       ))}
     </div>
   );
