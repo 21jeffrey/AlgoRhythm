@@ -7,6 +7,7 @@ use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Auth\NewPasswordController;
 use App\Http\Controllers\BadgeController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\AdminController;
 
 Route::apiResource('badges', BadgeController::class);
 Route::apiResource('users', UserController::class);
@@ -14,12 +15,18 @@ Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/forgot-password', [PasswordResetLinkController::class, 'store']);
 Route::post('/reset-password', [NewPasswordController::class, 'store']);
+Route::post('/admin/register', [AdminController::class, 'register']);
+Route::post('/admin/login', [AdminController::class, 'login']);
 
-Route::group([
-    'middleware' => ['auth:sanctum'],
-], function () {
-    Route::get('/profile', [AuthController::class, 'profile']);
-    Route::post('/logout', [AuthController::class, 'logout']);
+
+Route::middleware('auth:sanctum')->group(function () {
+    // For regular users
+    Route::get('/user/profile', [AuthController::class, 'profile']);
+    Route::post('/user/logout', [AuthController::class, 'logout']);
+
+    // For admins
+    Route::get('/admin/profile', [AdminController::class, 'profile']);
+    Route::post('/admin/logout', [AdminController::class, 'logout']);
 });
 
 
