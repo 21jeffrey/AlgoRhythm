@@ -4,7 +4,7 @@ import axios from 'axios';
 import { toast } from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
 
-const CreateBadgeForm = () => {
+const CreateBadgeForm = ({onClose, onSuccess}) => {
   const router = useRouter();
   const [formData, setFormData] = useState({
     name: '',
@@ -30,12 +30,13 @@ const CreateBadgeForm = () => {
     });
 
     try {
-      await axios.post(`${process.env.NEXT_PUBLIC_API_URL}api/badges`, payload, {
+       await axios.post(`${process.env.NEXT_PUBLIC_API_URL}api/badges`, payload, {
         headers: { 'Content-Type': 'multipart/form-data' }
       });
       toast.success('Badge created!');
       setFormData({ name: '', description: '', threshold_type: 'points', threshold_value: '', image: null });
-      router.push('/admin/dashboard/badges');
+      onClose();  
+      onSuccess(); 
     } catch (err) {
       toast.error(err.response?.data?.message || 'Failed to create badge');
     }

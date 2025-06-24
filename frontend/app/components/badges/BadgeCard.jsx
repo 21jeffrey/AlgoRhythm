@@ -6,8 +6,15 @@ import Swal from 'sweetalert2';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 import { useCallback } from 'react';
+import Modal from '@/app/components/Modal';
+import UpdateBadgeForm from '@/app/components/badges/UpdateBadgeForm';
+import { useState } from 'react';
 
-const BadgeCard = ({ badge, onDelete }) => {
+const BadgeCard = ({ badge, onDelete, onSuccess }) => {
+      const [isModalOpen, setIsModalOpen] = useState(false);
+  
+    const openModal = () => setIsModalOpen(true);
+    const closeModal = () => setIsModalOpen(false);
     const router = useRouter();
   const handleDelete = useCallback((id) => {
     Swal.fire({
@@ -50,7 +57,7 @@ const BadgeCard = ({ badge, onDelete }) => {
                 </span>
                 <div className="card-actions justify-end space-x-2">
                     <button className="btn btn-sm btn-outline btn-warning flex items-center gap-1"
-                    onClick={() => router.push(`/admin/dashboard/badges/${badge.id}/edit`)}
+                    onClick={openModal}
                     >
                         <PencilSquareIcon className="h-4 w-4" />
                         Edit
@@ -63,6 +70,13 @@ const BadgeCard = ({ badge, onDelete }) => {
                     </button>
                 </div>
             </div>
+<Modal isOpen={isModalOpen} onClose={closeModal}>
+  <UpdateBadgeForm
+    badge={badge}
+    onClose={closeModal}
+    onSuccess={onSuccess}
+  />
+</Modal>
         </div>
     );
 };

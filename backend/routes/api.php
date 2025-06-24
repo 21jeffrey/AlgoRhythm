@@ -8,7 +8,13 @@ use App\Http\Controllers\Auth\NewPasswordController;
 use App\Http\Controllers\BadgeController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\ChallengeController;
 
+Route::apiResource('challenges', ChallengeController::class);
+Route::get('challenges/{challenge}/subproblems', [ChallengeController::class, 'subproblemIndex']);
+Route::post('challenges/{challenge}/subproblems', [ChallengeController::class, 'subproblemStore']);
+Route::put('subproblems/{subproblem}', [ChallengeController::class, 'subproblemUpdate']);
+Route::delete('subproblems/{subproblem}', [ChallengeController::class, 'subproblemDestroy']);
 Route::apiResource('badges', BadgeController::class);
 Route::apiResource('users', UserController::class);
 Route::post('/register', [AuthController::class, 'register']);
@@ -27,6 +33,7 @@ Route::middleware('auth:sanctum')->group(function () {
     // For admins
     Route::get('/admin/profile', [AdminController::class, 'profile']);
     Route::post('/admin/logout', [AdminController::class, 'logout']);
+
 });
 
 
