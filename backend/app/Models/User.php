@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Support\Facades\DB;
 
 class User extends Authenticatable
 {
@@ -50,6 +51,24 @@ class User extends Authenticatable
     
 public function sendPasswordResetNotification($token) {
     $this->notify(new \App\Notifications\ResetPasswordNotification($token));
+}
+
+public function badges()
+{
+    return $this->belongsToMany(\App\Models\Badge::class, 'learner_badge', 'learner_id', 'badge_id')
+                ->withTimestamps()
+                ->withPivot('awarded_at');
+}
+
+public function leaderboard()
+{
+    $leaderboard = DB::table('leaderboard_learner')
+        ->join('users', 'leaderboard_learner.learner_id', '=', 'users.id')
+        ->orderByDesc('score')
+        ->select('users.name', 'leaderboard_learner.score', 'leaderboard_learner.rank')
+        ->get();
+
+    return response()->json($leaderboard);
 }
 
 }

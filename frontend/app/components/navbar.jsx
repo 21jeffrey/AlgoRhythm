@@ -45,6 +45,9 @@ const Navbar = () => {
           <Link href="/" className={linkClass("/")}>Home</Link>
         </li>
         <li>
+          <Link href="/challenges/page2" className={linkClass("/challenges/page2")}>Challenges</Link>
+        </li>
+        <li>
           <Link href="/about" className={linkClass("/about")}>About Us</Link>
         </li>
         <li>
@@ -74,6 +77,9 @@ const Navbar = () => {
         <ul className="flex flex-col space-y-6 items-center w-full">
           <li className="w-full text-center">
             <Link href="/" className={linkClass("/")} onClick={handleCloseNav}>Home</Link>
+          </li>
+          <li className="w-full text-center">
+           <Link href="/challenges/page2" className={linkClass("/challenges/page2")} onClick={handleCloseNav}>Challenges</Link> 
           </li>
           <li className="w-full text-center">
             <Link href="/about" className={linkClass("/about")} onClick={handleCloseNav}>About Us</Link>

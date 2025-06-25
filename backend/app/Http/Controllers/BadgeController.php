@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Badge;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Auth;
 
 
 class BadgeController extends Controller
@@ -108,4 +109,10 @@ class BadgeController extends Controller
         return response()->json(['message' => 'Badge deleted']);
     }
     
+    public function myBadges()
+    {
+        $user = Auth::user();
+        $badges = $user->badges()->with('pivot')->get(); 
+        return response()->json($badges);
+    }
 }

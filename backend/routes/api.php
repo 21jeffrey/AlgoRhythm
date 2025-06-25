@@ -9,6 +9,8 @@ use App\Http\Controllers\BadgeController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ChallengeController;
+use App\Http\Controllers\LeaderboardController;
+use Illuminate\Support\Facades\Auth;
 
 Route::apiResource('challenges', ChallengeController::class);
 Route::get('challenges/{challenge}/subproblems', [ChallengeController::class, 'subproblemIndex']);
@@ -17,6 +19,7 @@ Route::put('challenges/{challenge}/subproblems/{subproblem}', [ChallengeControll
 Route::delete('challenges/{challenge}/subproblems/{subproblem}', [ChallengeController::class, 'subproblemDestroy']);
 Route::apiResource('badges', BadgeController::class);
 Route::apiResource('users', UserController::class);
+Route::get('/leaderboard', [LeaderboardController::class, 'index']);
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/forgot-password', [PasswordResetLinkController::class, 'store']);
@@ -34,7 +37,11 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/admin/profile', [AdminController::class, 'profile']);
     Route::post('/admin/logout', [AdminController::class, 'logout']);
 
+    Route::get('/my-badges', [BadgeController::class, 'myBadges']);
 });
+
+)}
+
 
 
 /*Route::get('/user', function (Request $request) {
