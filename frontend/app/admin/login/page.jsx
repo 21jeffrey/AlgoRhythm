@@ -19,7 +19,7 @@ function Page() {
     setLoading(true);
 
     try {
-      const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}api/login`, {
+      const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}api/admin/login`, {
         email,
         password
       });
@@ -28,7 +28,7 @@ function Page() {
         Cookies.set('token', response.data.token, { expires: 7 });
         toast.success("Login successful");
         setTimeout(() => {
-          router.push('/dashboard');
+          router.push('/admin/dashboard');
         }, 500); 
       } else {
         toast.error(response.data.message || "Login failed");

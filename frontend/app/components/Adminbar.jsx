@@ -1,12 +1,18 @@
 'use client';
 
 import React from 'react';
-import { AcademicCapIcon, ArrowLeftEndOnRectangleIcon, HomeIcon, TrophyIcon, UserGroupIcon, ChartBarIcon } from '@heroicons/react/24/outline';
+import { AcademicCapIcon,  HomeIcon,  UserGroupIcon, ChartBarIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import Image from 'next/image';
+import {Award} from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import Cookies from 'js-cookie';
+import toast from 'react-hot-toast';
 
 
 function Adminbar() {
+  const router = useRouter();
+  const token = Cookies.get('token');
   const Navbar = [
     {
         name: "Home",
@@ -15,31 +21,36 @@ function Adminbar() {
     },
     {
       name: "Challenges",
-      link: "/admin/challenges",
+      link: "/admin/dashboard/challenges",
       icon: AcademicCapIcon,
     },
     {
-      name: "Users",
-      link: "/admin/users",
+      name: "Learners",
+      link: "/admin/dashboard/learners",
       icon: UserGroupIcon,
     },
     {
       name: "Badges",
-      link: "/admin/badges",
-      icon: TrophyIcon,
+      link: "/admin/dashboard/badges",
+      icon: Award,
     },
     {
       name: "Analytics",
-      link: "/admin/analytics",
+      link: "/admin/dashboard/analytics",
       icon: ChartBarIcon,
     },
-    {
-      name: "Logout",
-      link: "/admin/logout",
-      icon: ArrowLeftEndOnRectangleIcon,  
-    },
+
 
   ];
+
+      const handleLogout = () => {
+            Cookies.remove('token');
+    
+            setTimeout(() => {
+              router.push('/admin/login');
+              toast.success("Logged out successful");
+            }, 300); 
+        }
 
   return (
     <aside className="bg-gray-900 h-screen text-white p-4 w-64">
@@ -69,8 +80,19 @@ function Adminbar() {
               </Link>
             </li>
           ))}
+
+             <li>
+                <button
+                  onClick={handleLogout}
+                    className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 transition-colors duration-300"
+                    >
+                      Logout
+                  </button>
+              </li>
         </ul>
+        
       </nav>
+      
     </aside>
   );
 }
