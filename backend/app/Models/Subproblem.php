@@ -12,7 +12,10 @@ class Subproblem extends Model
     protected $fillable = [
         'challenge_id',
         'title',
-        'description'
+        'description',
+        'hint',
+        'expected_output',
+        'test_cases'
     ];
 
      // Relationship: Each Subproblem belongs to one Challenge

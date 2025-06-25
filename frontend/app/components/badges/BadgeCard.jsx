@@ -10,12 +10,11 @@ import Modal from '@/app/components/Modal';
 import UpdateBadgeForm from '@/app/components/badges/UpdateBadgeForm';
 import { useState } from 'react';
 
-const BadgeCard = ({ badge, onDelete, onSuccess }) => {
+const BadgeCard = ({ badge, onDelete, onSuccess  }) => {
       const [isModalOpen, setIsModalOpen] = useState(false);
   
     const openModal = () => setIsModalOpen(true);
-    const closeModal = () => setIsModalOpen(false);
-    const router = useRouter();
+
   const handleDelete = useCallback((id) => {
     Swal.fire({
       title: 'Are you sure?',
@@ -39,7 +38,7 @@ const BadgeCard = ({ badge, onDelete, onSuccess }) => {
     });
   }, [onDelete]);
 
-    return (
+    return (  
         <div className="card card-side bg-base-100 shadow-sm hover:shadow-[0_10px_15px_rgba(139,92,246,0.4)] transition-shadow duration-300 max-w-2xl p-4">
             <figure className="w-1/3">
                 <img
@@ -70,11 +69,15 @@ const BadgeCard = ({ badge, onDelete, onSuccess }) => {
                     </button>
                 </div>
             </div>
-<Modal isOpen={isModalOpen} onClose={closeModal}>
+
+<Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title="Edit Badge">
   <UpdateBadgeForm
     badge={badge}
-    onClose={closeModal}
-    onSuccess={onSuccess}
+    onClose={() => {
+      setIsModalOpen(false);}}
+    onSuccess={() =>{
+      setIsModalOpen(false);
+    }}
   />
 </Modal>
         </div>

@@ -119,32 +119,42 @@ class ChallengeController extends Controller
         $validated = $request->validate([
             'title' => 'required|string',
             'description' => 'required|string',
+            'hint' => 'nullable|string',
+            'expected_output' => 'required|string',
+            'test_cases' => 'required|array',
         ]);
+
+        $validated['test_cases'] = json_encode($validated['test_cases']);
 
         $subproblem = $challenge->subproblems()->create($validated);
 
         return response()->json($subproblem, 201);
     }
 
-    public function subproblemUpdate(Request $request, Subproblem $subproblem)
+    public function subproblemUpdate(Request $request, Challenge $challenge, Subproblem $subproblem)
     {
         $validated = $request->validate([
             'title' => 'required|string',
             'description' => 'required|string',
+            'hint' => 'nullable|string',
+            'expected_output' => 'required|string',
+            'test_cases' => 'required|array',
         ]);
+
+        $validated['test_cases'] = json_encode($validated['test_cases']);
+
+        if ($subproblem->challenge_id !== $challenge->id) {
+            return response()->json(['message' => 'Subproblem does not belong to this challenge'], 403);
+        }
 
         $subproblem->update($validated);
 
         return response()->json($subproblem);
     }
 
-    public function subproblemDestroy(Subproblem $subproblem)
+    public function subproblemDestroy(Challenge $challenge, Subproblem $subproblem)
     {
         $subproblem->delete();
-
-        return response()->json([
-            'status' => true,
-            'message' => 'Subproblem deleted successfully',
-        ]);
+        return response()->json(['message' => 'Subproblem deleted']);
     }
 }

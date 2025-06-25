@@ -7,11 +7,10 @@ import CreateBadgeForm from '@/app/components/badges/CreateBadgeForm';
 import { useState } from 'react';
 
 const BadgesPage = () => {
-    const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
-  const [refetchKey, setRefetchKey] = useState(0);
   return (
     <div className="p-6 ">
         <div className="flex items-center justify-between mb-6">
@@ -28,10 +27,10 @@ const BadgesPage = () => {
             Here you can manage the badges awarded to users for completing challenges.
         </p>
       <hr className="my-6 border-gray-600" />
-      <BadgeList refetchKey={refetchKey} onSuccess={() => setRefetchKey(k => k + 1)} />
+      <BadgeList  />
 
       <Modal isOpen={isModalOpen} onClose={closeModal}>
-        <CreateBadgeForm onClose={closeModal} onSuccess={() => setRefetchKey(prev => prev + 1)}/>
+        <CreateBadgeForm onClose={closeModal} />
       </Modal>
     </div>
   );

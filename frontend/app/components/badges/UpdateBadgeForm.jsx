@@ -5,7 +5,7 @@ import axios from 'axios';
 import { PencilSquareIcon } from '@heroicons/react/24/outline';
 import toast from 'react-hot-toast';
 
-export default function UpdateBadgeForm({ badge, onClose, onSuccess }) {
+export default function UpdateBadgeForm({ badge, onClose }) {
   const router = useRouter();
 
   const [form, setForm] = useState({
@@ -39,8 +39,8 @@ export default function UpdateBadgeForm({ badge, onClose, onSuccess }) {
       );
 
       toast.success('Badge updated');
-      if (onSuccess) onSuccess();
       onClose();
+      window.location.reload(); 
     } catch (error) {
       console.error(error);
       toast.error('Error updating badge');
