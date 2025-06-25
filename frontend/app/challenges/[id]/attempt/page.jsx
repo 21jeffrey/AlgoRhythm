@@ -7,7 +7,7 @@ import MonacoEditor from '@/app/components/challenges/MonacoEditor';
 import { ChatBubbleLeftRightIcon, DocumentTextIcon } from '@heroicons/react/24/outline';
 
 const AttemptPage = () => {
-  const { id } = useParams(); // Challenge ID
+  const { id } = useParams(); 
   const [challenge, setChallenge] = useState(null);
   const [subproblems, setSubproblems] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
