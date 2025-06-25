@@ -6,8 +6,11 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Auth\NewPasswordController;
 use App\Http\Controllers\BadgeController;
+use App\Http\Controllers\LeaderboardController;
+use Illuminate\Support\Facades\Auth;
 
 Route::apiResource('badges', BadgeController::class);
+Route::get('/leaderboard', [LeaderboardController::class, 'index']);
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/forgot-password', [PasswordResetLinkController::class, 'store']);
@@ -18,6 +21,7 @@ Route::group([
 ], function () {
     Route::get('/profile', [AuthController::class, 'profile']);
     Route::post('/logout', [AuthController::class, 'logout']);
+    Route::get('/my-badges', [BadgeController::class, 'myBadges']);
 });
 
 

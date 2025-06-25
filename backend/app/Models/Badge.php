@@ -13,4 +13,11 @@ class Badge extends Model
         'threshold_value', 
         'image'
     ];
+
+    public function learners()
+    {
+        return $this->belongsToMany(\App\Models\User::class, 'learner_badge', 'badge_id', 'learner_id')
+                    ->withTimestamps()
+                    ->withPivot('awarded_at');
+    }
 }
