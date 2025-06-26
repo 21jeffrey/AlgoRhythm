@@ -8,6 +8,13 @@ import Cookies from 'js-cookie';
 
 function DashboardPage() {
   const [user, setUser] = useState(null);
+   useEffect(() => {
+    const token = Cookies.get('token');
+    if (!token) {
+      router.push('/admin/login'); 
+      toast.error('You must be logged in to access the admin dashboard.');
+    }
+  }, []);
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -28,6 +35,7 @@ function DashboardPage() {
 
     fetchUser();
   }, []);
+
 
   return (
     <div className="flex bg-black text-white min-h-screen">

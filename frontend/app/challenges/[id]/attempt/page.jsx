@@ -136,7 +136,7 @@ const AttemptPage = () => {
           )}
 
           {selectedTab === 'feedback' && (
-            <p className="text-gray-500 italic mt-2">Feedback and tips will be available here.</p>
+            <p className="text-gray-500 italic mt-2">Feedback and results will be available here after submission.</p>
           )}
         </div>
       </div>
@@ -153,7 +153,6 @@ const AttemptPage = () => {
             >
               <option value="python">Python</option>
               <option value="javascript">JavaScript</option>
-              <option value="cpp">C++</option>
               <option value="java">Java</option>
             </select>
           </div>

@@ -40,7 +40,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/my-badges', [BadgeController::class, 'myBadges']);
 });
 
-)}
 
 
 
