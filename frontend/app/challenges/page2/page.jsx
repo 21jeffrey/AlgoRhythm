@@ -11,19 +11,19 @@ const challenges = [
     id: 1,
     title: "FizzBuzz",
     description: "Write a program that prints the numbers from 1 to 100. But for multiples of three print 'Fizz' instead of the number and for the multiples of five print 'Buzz'.",
-    difficulty: "Easy",
+    difficulty: "Beginner",
   },
   {
     id: 2,
     title: "Two Sum",
     description: "Given an array of integers, return indices of the two numbers such that they add up to a specific target.",
-    difficulty: "Medium",
+    difficulty: "Intermediate",
   },
   {
     id: 3,
     title: "LRU Cache",
     description: "Design and implement a data structure for Least Recently Used (LRU) cache.",
-    difficulty: "Hard",
+    difficulty: "Advanced",
   },
   // Add more challenges as needed
 ];
