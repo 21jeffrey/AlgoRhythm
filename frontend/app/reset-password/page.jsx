@@ -1,11 +1,11 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 
-export default function ResetPasswordPage() {
+function ResetPasswordContent() {
   const [password, setPassword] = useState('');
   const [passwordConfirmation, setPasswordConfirmation] = useState('');
   const [email, setEmail] = useState('');
@@ -57,40 +57,71 @@ export default function ResetPasswordPage() {
 
   return (
     <div className='flex items-center justify-center min-h-screen bg-gradient-to-l from-purple-500 to-violet-900'>
-      <div className="max-w-lg w-full">
-        <div className="bg-gray-800 p-8 rounded-lg shadow-lg">
-          <h2 className="text-gray-400 text-center text-xl mb-6">Reset Your Password</h2>
-          <form onSubmit={handleSubmit} className="space-y-6">
-            <div>
-              <input
-                type="password"
-                placeholder="New Password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="w-full px-3 py-3 rounded-md bg-gray-700 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-violet-500"
-                required
-              />
+      <div className="w-full flex justify-center">
+        <div className="max-w-2xl w-full">
+          <div
+            style={{ boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)' }}
+            className="bg-gray-800 rounded-lg shadow-l overflow-hidden"
+          >
+            <div className="p-8">
+              <h2 className="text-center text-3xl font-extrabold text-white">
+                Reset Password
+              </h2>
+              <form onSubmit={handleSubmit} className="mt-8 space-y-6">
+                <div className="rounded-md shadow-sm">
+                  <div>
+                    <label className="sr-only" htmlFor="password">New Password</label>
+                    <input
+                      placeholder="New Password"
+                      className="appearance-none relative block w-full px-3 py-3 border border-gray-700 bg-gray-700 text-white rounded-md focus:outline-none focus:ring-violet-500 focus:border-violet-500 focus:z-10 sm:text-sm"
+                      required
+                      type="password"
+                      name="password"
+                      id="password"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                    />
+                  </div>
+                  <div className="mt-4">
+                    <label className="sr-only" htmlFor="password_confirmation">Confirm New Password</label>
+                    <input
+                      placeholder="Confirm New Password"
+                      className="appearance-none relative block w-full px-3 py-3 border border-gray-700 bg-gray-700 text-white rounded-md focus:outline-none focus:ring-violet-500 focus:border-violet-500 focus:z-10 sm:text-sm"
+                      required
+                      type="password"
+                      name="password_confirmation"
+                      id="password_confirmation"
+                      value={passwordConfirmation}
+                      onChange={(e) => setPasswordConfirmation(e.target.value)}
+                    />
+                  </div>
+                </div>
+                <div>
+                  <button
+                    className="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-md text-gray-900 bg-violet-500 hover:bg-violet-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-violet-500"
+                    type="submit"
+                    disabled={loading}
+                  >
+                    {loading ? 'Resetting...' : 'Reset Password'}
+                  </button>
+                </div>
+              </form>
             </div>
-            <div>
-              <input
-                type="password"
-                placeholder="Confirm New Password"
-                value={passwordConfirmation}
-                onChange={(e) => setPasswordConfirmation(e.target.value)}
-                className="w-full px-3 py-3 rounded-md bg-gray-700 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-violet-500"
-                required
-              />
-            </div>
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-full py-3 rounded-md bg-violet-500 text-gray-900 font-semibold hover:bg-violet-600 transition duration-200"
-            >
-              {loading ? 'Resetting...' : 'Reset Password'}
-            </button>
-          </form>
+          </div>
         </div>
       </div>
     </div>
+  );
+}
+
+export default function ResetPasswordPage() {
+  return (
+    <Suspense fallback={
+      <div className="flex items-center justify-center min-h-screen bg-gradient-to-l from-purple-500 to-violet-900">
+        <div className="text-white text-2xl">Loading...</div>
+      </div>
+    }>
+      <ResetPasswordContent />
+    </Suspense>
   );
 }
