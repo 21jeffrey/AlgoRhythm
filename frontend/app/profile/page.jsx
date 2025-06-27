@@ -42,7 +42,7 @@ export default function ProfilePage() {
     <div className="flex">
       <Sidebar />
       <main className="flex-1 p-10 bg-black-200 min-h-screen">
-        <h1 className="text-3xl font-bold mb-6">Profile</h1>
+        <h1 className="text-3xl font-bold mb-6">Welcome to your Profile</h1>
         {user && (
           <div className="flex items-center gap-6 mb-10 bg-gray-800 p-6 rounded-lg shadow">
             <img
