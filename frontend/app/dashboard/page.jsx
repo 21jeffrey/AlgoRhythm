@@ -41,10 +41,8 @@ function DashboardPage() {
     <div className="flex bg-black text-white min-h-screen">
       <Sidebar />
       <main className="flex-1 p-10">
-        <h1 className="text-3xl font-bold">Dashboard</h1>
-        <p className="mt-2 mb-6">
-          Welcome back
-        </p>
+        <h1 className="text-3xl font-bold">Welcome back , {user ? user.name : 'User'}!</h1>
+        <p className="text-white-400 py-4">Here's a quick overview of your progress.</p>
         <DashboardStats />
         {/* Other dashboard content goes here */}
       </main>
