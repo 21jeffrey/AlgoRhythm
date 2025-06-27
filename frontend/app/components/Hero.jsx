@@ -28,7 +28,6 @@ const Hero = () => {
 
       {/* Foreground Content */}
       <div className="relative z-10 max-w-[800px] mt-[-96px] w-full h-screen mx-auto text-center flex flex-col justify-center">
-        <p className='text-purple-300 font-bold p-2'>GROWING WITH ALGORHYTHM</p>
         <h1 className='md:text-7xl sm:text-6xl text-4xl font-bold md:py-6'>Grow with code.</h1>
         
         <div className='flex justify-center items-center whitespace-nowrap text-center'>

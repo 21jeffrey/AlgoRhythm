@@ -8,9 +8,11 @@ use Illuminate\Support\Facades\Storage;
 
 class UserController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    public function attemptedChallenges(Request $request){
+        $user = $request->user();
+        $challenges= $user->attemptedChallenges()->get();
+        return response()->json($challenges);
+    }
     public function index()
     {
         return response()->json(User::all());

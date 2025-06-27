@@ -29,6 +29,8 @@ Route::post('/admin/login', [AdminController::class, 'login']);
 
 
 Route::middleware('auth:sanctum')->group(function () {
+    // for seeing the attempted challenges
+    Route::middleware('auth:sanctum')->get('/user/attempted-challenges',[UserController::class , 'attemptedChallenges']);
     // For regular users
     Route::get('/user/profile', [AuthController::class, 'profile']);
     Route::post('/user/logout', [AuthController::class, 'logout']);
