@@ -4,7 +4,7 @@ import Link from 'next/link';
 
 const DashboardStats = () => {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-4" >
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 bg" >
       <div className="bg-gray-700 p-6 rounded-lg shadow text-center">
         <Award className="h-12 w-12 text-yellow-500 mx-auto mb-4" />
         <h3 className="text-xl font-bold mb-2">Badges</h3>
