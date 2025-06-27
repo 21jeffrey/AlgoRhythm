@@ -21,12 +21,12 @@ function DashboardPage() {
       const token = Cookies.get('token');
       if (token) {
         try {
-          const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}api/profile`, {
+          const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}api/user/profile`, {
             headers: {
               Authorization: `Bearer ${token}`,
             },
           });
-          setUser(response.data);
+          setUser(response.data.user);
         } catch (error) {
           console.error('Failed to fetch user:', error);
         }
@@ -43,7 +43,7 @@ function DashboardPage() {
       <main className="flex-1 p-10">
         <h1 className="text-3xl font-bold">Dashboard</h1>
         <p className="mt-2 mb-6">
-          Welcome back, {user ? user.name : 'User'}!
+          Welcome back
         </p>
         <DashboardStats />
         {/* Other dashboard content goes here */}

@@ -7,6 +7,7 @@ import { usePathname } from "next/navigation";
 
 const Navbar = () => {
   const [nav, setNav] = useState(false);
+  const [user, setUser] = useState(null);
   const pathname = usePathname();
 
   const handleNav = () => setNav(!nav);
@@ -32,6 +33,19 @@ const Navbar = () => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      fetch(`${process.env.NEXT_PUBLIC_API_URL}api/user/profile`, {
+        headers: { 'Authorization': `Bearer ${token}` }
+      })
+        .then(res => res.json())
+        .then(data => {
+          if (data.user) setUser(data.user);
+        });
+    }
+  }, []);
+
   const linkClass = (href) =>
     `px-6 py-2 transition text-lg cursor-pointer select-none
       ${pathname === href ? "text-purple-400 font-bold border-b-2 border-purple-500" : "hover:text-purple-400"}
@@ -54,11 +68,21 @@ const Navbar = () => {
           <a href="#contact" className={linkClass("#contact")} onClick={handleScrollToContact}>Contact Us</a>
         </li>
         <li>
-          <Link href="/login">
-            <button className="bg-purple-600 hover:bg-purple-700 px-6 py-2 rounded-full font-semibold transition cursor-pointer hover:scale-105 active:scale-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-purple-500">
-              Login
-            </button>
-          </Link>
+          {user ? (
+            <Link href="/profile">
+              <img
+                src={user.avatar_image ? `${process.env.NEXT_PUBLIC_API_URL}storage/${user.avatar_image}` : '/default-avatar.png'}
+                alt="Profile"
+                className="w-10 h-10 rounded-full object-cover border-2 border-purple-500 cursor-pointer"
+              />
+            </Link>
+          ) : (
+            <Link href="/login">
+              <button className="bg-purple-600 hover:bg-purple-700 px-6 py-2 rounded-full font-semibold transition cursor-pointer hover:scale-105 active:scale-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-purple-500">
+                Login
+              </button>
+            </Link>
+          )}
         </li>
       </ul>
       <div onClick={handleNav} className="block md:hidden cursor-pointer absolute top-6 right-6">
@@ -88,11 +112,21 @@ const Navbar = () => {
             <a href="#contact" className={linkClass("#contact")} onClick={(e) => { handleScrollToContact(e); handleCloseNav(); }}>Contact Us</a>
           </li>
           <li className="w-full text-center">
-            <Link href="/login" onClick={handleCloseNav}>
-              <button className="bg-purple-600 hover:bg-purple-700 px-6 py-2 rounded-full font-semibold transition cursor-pointer hover:scale-105 active:scale-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-purple-500">
-                Login
-              </button>
-            </Link>
+            {user ? (
+              <Link href="/profile" onClick={handleCloseNav}>
+                <img
+                  src={user.avatar_image ? `${process.env.NEXT_PUBLIC_API_URL}storage/${user.avatar_image}` : '/default-avatar.png'}
+                  alt="Profile"
+                  className="w-10 h-10 rounded-full object-cover border-2 border-purple-500 cursor-pointer mx-auto"
+                />
+              </Link>
+            ) : (
+              <Link href="/login" onClick={handleCloseNav}>
+                <button className="bg-purple-600 hover:bg-purple-700 px-6 py-2 rounded-full font-semibold transition cursor-pointer hover:scale-105 active:scale-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-purple-500">
+                  Login
+                </button>
+              </Link>
+            )}
           </li>
         </ul>
       </div>
