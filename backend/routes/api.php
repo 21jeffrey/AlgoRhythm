@@ -26,11 +26,14 @@ Route::post('/forgot-password', [PasswordResetLinkController::class, 'store']);
 Route::post('/reset-password', [NewPasswordController::class, 'store']);
 Route::post('/admin/register', [AdminController::class, 'register']);
 Route::post('/admin/login', [AdminController::class, 'login']);
-
+Route::get('/users/search', [UserController::class, 'search']);
+Route::post('/friends/{friendId}', [UserController::class, 'addFriend']);
+Route::delete('/friends/{friendId}', [UserController::class, 'removeFriend']);
 
 Route::middleware('auth:sanctum')->group(function () {
     // for seeing the attempted challenges
-    Route::middleware('auth:sanctum')->get('/user/attempted-challenges',[UserController::class , 'attemptedChallenges']);
+    Route::get('/user/attempted-challenges',[UserController::class , 'attemptedChallenges']);
+
     // For regular users
     Route::get('/user/profile', [AuthController::class, 'profile']);
     Route::post('/user/logout', [AuthController::class, 'logout']);

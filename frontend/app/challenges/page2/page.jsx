@@ -1,32 +1,21 @@
 "use client";
-import React, { useState } from "react";
-
-// Dummy data for demonstration
-const challenges = [
-  {
-    id: 1,
-    title: "FizzBuzz",
-    description: "Write a program that prints the numbers from 1 to 100. But for multiples of three print 'Fizz' instead of the number and for the multiples of five print 'Buzz'.",
-    difficulty: "Beginner",
-  },
-  {
-    id: 2,
-    title: "Two Sum",
-    description: "Given an array of integers, return indices of the two numbers such that they add up to a specific target.",
-    difficulty: "Intermediate",
-  },
-  {
-    id: 3,
-    title: "LRU Cache",
-    description: "Design and implement a data structure for Least Recently Used (LRU) cache.",
-    difficulty: "Advanced",
-  },
-  // Add more challenges as needed
-];
+import React, { useState, useEffect } from "react";
 
 export default function ChallengesPage2() {
+  const [challenges, setChallenges] = useState([]);
   const [search, setSearch] = useState("");
   const [difficulty, setDifficulty] = useState("All");
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetch(`${process.env.NEXT_PUBLIC_API_URL}api/challenges`)
+      .then(res => res.json())
+      .then(data => {
+        setChallenges(data);
+        setLoading(false);
+      })
+      .catch(() => setLoading(false));
+  }, []);
 
   // Filter and search logic
   const filteredChallenges = challenges.filter((c) => {
@@ -62,7 +51,9 @@ export default function ChallengesPage2() {
 
       {/* Challenge Cards Grid */}
       <div className="p-8 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 bg-gray-700">
-        {filteredChallenges.length === 0 ? (
+        {loading ? (
+          <div className="col-span-full text-center text-gray-500">Loading...</div>
+        ) : filteredChallenges.length === 0 ? (
           <div className="col-span-full text-center text-gray-500">No challenges found.</div>
         ) : (
           filteredChallenges.map((challenge) => (

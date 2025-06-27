@@ -21,11 +21,18 @@ class UserController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function addFriend(Request $request)
     {
-        //
+        $user= $request->user();
+        $user->friends()->attach($FriendId);
+        return response()->json(['message'=> 'Friend Added']);
     }
-
+    public function removeFriend(Request $request , $FriendId)
+{
+    $user = $request->user();
+    $user->friends()->detach($FriendId);
+    return response()->json(['message'=> 'Friend Removed']);
+}
     /**
      * Store a newly created resource in storage.
      */
@@ -53,9 +60,13 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function search(Request $request)
     {
-        //
+        $query = $request->input('query');
+        $users = User::where('name','like', "%query")
+        ->orWhere('email','like', "%query")
+        ->get(['id', 'name', 'avatar_image']);
+        return response()->json($users);
     }
 
     /**

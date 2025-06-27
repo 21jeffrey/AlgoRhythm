@@ -11,7 +11,7 @@ function DashboardPage() {
    useEffect(() => {
     const token = Cookies.get('token');
     if (!token) {
-      router.push('/admin/login'); 
+      router.push('/app/login'); 
       toast.error('You must be logged in to access the admin dashboard.');
     }
   }, []);
