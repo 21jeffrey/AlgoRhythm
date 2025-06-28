@@ -26,10 +26,11 @@ function Page() {
 
       if (response.data.status) {
         Cookies.set('token', response.data.token, { expires: 7 });
+        localStorage.setItem('token', response.data.token);
         toast.success("Login successful");
         setTimeout(() => {
-          router.push('/dashboard');
-        }, 500); 
+          window.location.href = '/dashboard';
+        }, 500);
       } else {
         toast.error(response.data.message || "Login failed");
       }

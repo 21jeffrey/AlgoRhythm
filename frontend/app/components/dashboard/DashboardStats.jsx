@@ -4,7 +4,7 @@ import Link from 'next/link';
 
 const DashboardStats = () => {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-4" >
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 bg" >
       <div className="bg-gray-700 p-6 rounded-lg shadow text-center">
         <Award className="h-12 w-12 text-yellow-500 mx-auto mb-4" />
         <h3 className="text-xl font-bold mb-2">Badges</h3>
@@ -16,9 +16,9 @@ const DashboardStats = () => {
       <div className="bg-gray-700 p-6 rounded-lg shadow text-center">
         <Shield className="h-12 w-12 text-blue-500 mx-auto mb-4" />
         <h3 className="text-xl font-bold mb-2">Challenges</h3>
-        <p className="text-white-600 mb-4">Take on new challenges.</p>
-        <Link href="/challenges" className="bg-blue-500 text-white px-6 py-2 rounded-full hover:bg-blue-600 transition">
-          View Challenges
+        <p className="text-white-600 mb-4">See your attempted challenges.</p>
+        <Link href="/challenges/attempted" className="bg-blue-500 text-white px-6 py-2 rounded-full hover:bg-blue-600 transition">
+          View  Challenges
         </Link>
       </div>
       <div className="bg-gray-700 p-6 rounded-lg shadow text-center">

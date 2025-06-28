@@ -1,4 +1,7 @@
 "use client";
+<<<<<<< HEAD
+import React, { useState, useEffect } from "react";
+=======
 import React, { useState } from "react";
 import Aurora from "@/public/Backgrounds/Aurora/Aurora";
 import { useRouter } from 'next/navigation';
@@ -27,11 +30,31 @@ const challenges = [
   },
   // Add more challenges as needed
 ];
+>>>>>>> 145fd36ea71e887645ea539a84674bba92ba5c6e
 
 export default function ChallengesPage2() {
+  const [challenges, setChallenges] = useState([]);
   const [search, setSearch] = useState("");
   const [difficulty, setDifficulty] = useState("All");
+<<<<<<< HEAD
   const router = useRouter();
+=======
+<<<<<<< HEAD
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetch(`${process.env.NEXT_PUBLIC_API_URL}api/challenges`)
+      .then(res => res.json())
+      .then(data => {
+        setChallenges(data);
+        setLoading(false);
+      })
+      .catch(() => setLoading(false));
+  }, []);
+=======
+  const router = useRouter();
+>>>>>>> 145fd36ea71e887645ea539a84674bba92ba5c6e
+>>>>>>> 09c79a52065076a8c987f3a38bfdaf56d318077d
 
   // Filter and search logic
   const filteredChallenges = challenges.filter((c) => {
@@ -66,6 +89,31 @@ export default function ChallengesPage2() {
         />
       </div>
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+      {/* Challenge Cards Grid */}
+      <div className="p-8 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 bg-gray-700">
+        {loading ? (
+          <div className="col-span-full text-center text-gray-500">Loading...</div>
+        ) : filteredChallenges.length === 0 ? (
+          <div className="col-span-full text-center text-gray-500">No challenges found.</div>
+        ) : (
+          filteredChallenges.map((challenge) => (
+            <div key={challenge.id} className="bg-purple-700 rounded-lg shadow p-6 flex flex-col justify-between">
+              <div>
+                <div className="flex items-center gap-2 mb-2">
+                  <span className={`px-3 py-1 rounded-full text-xs font-bold ${
+                    challenge.difficulty === 'Beginner'
+                      ? 'bg-green-100 text-green-700'
+                      : challenge.difficulty === 'Intermediate'
+                      ? 'bg-yellow-100 text-yellow-700'
+                      : 'bg-red-100 text-red-700'
+                  }`}>
+                    {challenge.difficulty}
+                  </span>
+=======
+>>>>>>> 09c79a52065076a8c987f3a38bfdaf56d318077d
       {/* Content */}
       <div className="relative z-10">
         {/* Filter and Search Bar */}
@@ -112,6 +160,10 @@ export default function ChallengesPage2() {
                   <p className="text-gray-300 mb-4 text-sm">
                     {challenge.description}
                   </p>
+<<<<<<< HEAD
+=======
+>>>>>>> 145fd36ea71e887645ea539a84674bba92ba5c6e
+>>>>>>> 09c79a52065076a8c987f3a38bfdaf56d318077d
                 </div>
                 <button
                   onClick={() => handleAttemptClick(challenge.id)}

@@ -10,7 +10,13 @@ use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Support\Facades\DB;
 
 class User extends Authenticatable
+
 {
+    public function attemptedChallenges(){
+        return $this->belongsToMany(Challenge::class, 'user_attempt_challenge')
+        ->WithTimestamps()
+        ->withPivot('attempted_at');
+    }
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable, HasApiTokens;
 

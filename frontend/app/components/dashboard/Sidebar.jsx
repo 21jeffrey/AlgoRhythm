@@ -42,12 +42,7 @@ const Sidebar = () => {
             </a>
           </li>
          
-          <li className="mb-2">
-            <a href="/settings" className="flex items-center p-2 rounded-md hover:bg-gray-700">
-              <Settings className="mr-3" />
-              Settings
-            </a>
-          </li>
+         
         </ul>
       </nav>
       <div className="p-2 border-t border-gray-700">

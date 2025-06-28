@@ -11,7 +11,7 @@ function DashboardPage() {
    useEffect(() => {
     const token = Cookies.get('token');
     if (!token) {
-      router.push('/admin/login'); 
+      router.push('/app/login'); 
       toast.error('You must be logged in to access the admin dashboard.');
     }
   }, []);
@@ -21,12 +21,12 @@ function DashboardPage() {
       const token = Cookies.get('token');
       if (token) {
         try {
-          const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}api/profile`, {
+          const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}api/user/profile`, {
             headers: {
               Authorization: `Bearer ${token}`,
             },
           });
-          setUser(response.data);
+          setUser(response.data.user);
         } catch (error) {
           console.error('Failed to fetch user:', error);
         }
@@ -38,13 +38,11 @@ function DashboardPage() {
 
 
   return (
-    <div className="flex bg-black text-white min-h-screen">
+    <div className="flex bg-black-200 text-white min-h-screen">
       <Sidebar />
       <main className="flex-1 p-10">
-        <h1 className="text-3xl font-bold">Dashboard</h1>
-        <p className="mt-2 mb-6">
-          Welcome back, {user ? user.name : 'User'}!
-        </p>
+        <h1 className="text-3xl font-bold">Welcome back , {user ? user.name : 'User'}!</h1>
+        <p className="text-white-400 py-4">Here's a quick overview of your progress.</p>
         <DashboardStats />
         {/* Other dashboard content goes here */}
       </main>

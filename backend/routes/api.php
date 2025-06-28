@@ -27,11 +27,16 @@ Route::post('/forgot-password', [PasswordResetLinkController::class, 'store']);
 Route::post('/reset-password', [NewPasswordController::class, 'store']);
 Route::post('/admin/register', [AdminController::class, 'register']);
 Route::post('/admin/login', [AdminController::class, 'login']);
-
+Route::get('/users/search', [UserController::class, 'search']);
+Route::post('/friends/{friendId}', [UserController::class, 'addFriend']);
+Route::delete('/friends/{friendId}', [UserController::class, 'removeFriend']);
 
 
 
 Route::middleware('auth:sanctum')->group(function () {
+    // for seeing the attempted challenges
+    Route::get('/user/attempted-challenges',[UserController::class , 'attemptedChallenges']);
+
     // For regular users
     Route::get('/profile', [AuthController::class, 'profile']);
     Route::post('/user/logout', [AuthController::class, 'logout']);
@@ -51,8 +56,11 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/submissions/{id}', [SubmissionController::class, 'show']);
 });
 
+<<<<<<< HEAD
 Route::apiResource('badges', BadgeController::class);
 
+=======
+>>>>>>> 09c79a52065076a8c987f3a38bfdaf56d318077d
 /*Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');*/
