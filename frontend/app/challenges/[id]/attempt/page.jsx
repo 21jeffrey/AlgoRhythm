@@ -14,6 +14,7 @@ const AttemptPage = () => {
   const [selectedLanguage, setSelectedLanguage] = useState('python');
   const [selectedTab, setSelectedTab] = useState('description');
   const [showHint, setShowHint] = useState(false);
+  const [userCode, setUserCode] = useState('');
 
   useEffect(() => {
     if (!id) return;
@@ -35,6 +36,10 @@ const AttemptPage = () => {
   useEffect(() => {
     setShowHint(false);
   }, [currentIndex]);
+
+  useEffect(() => {
+    setUserCode(currentSub?.starter_code || '');
+  }, [currentSub]);
 
   const handleLanguageChange = (e) => setSelectedLanguage(e.target.value);
   const handlePrev = () => setCurrentIndex((prev) => Math.max(prev - 1, 0));
@@ -159,7 +164,11 @@ const AttemptPage = () => {
         </div>
 
         <div className="flex-1 overflow-hidden">
-          <MonacoEditor language={selectedLanguage} />
+          <MonacoEditor 
+            language={selectedLanguage} 
+            initialCode={userCode}
+            onChange={setUserCode}
+          />
         </div>
       </div>
     </div>

@@ -23,26 +23,20 @@ const Features = () => {
     });
   }, []);
 
-  const Player = dynamic(
-  () =>
-    import("@lottiefiles/react-lottie-player").then((mod) => mod.Player),
-  { ssr: false }
-);
-
   return (
     <>
       <div id="features" className="relative w-full bg-black text-white py-20 px-4 overflow-hidden">
-        {/* ✅ Aurora Background that covers entire section */}
+        {/* Aurora Background that covers entire section */}
         <div className="absolute inset-0 z-0">
           <Aurora
     colorStops={["#530C73", "#63126E", "#7B248F", "#A64DBD"]}
     blend={0.84}
-    amplitude={0.6} // increased for more visible movement
-    speed={1.5} // increased to match Silk motion
+    amplitude={0.6}
+    speed={1.5}
   />
         </div>
 
-        {/* ✅ Foreground Content */}
+        {/* Foreground Content */}
         <div className="relative z-10 max-w-[1240px] mx-auto">
           {/* Features Title */}
           <div data-aos="zoom-in" className="mb-16 text-center">
