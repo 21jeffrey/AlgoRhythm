@@ -77,6 +77,8 @@ class AuthController extends Controller
             'status' => true,
             'user' => $user,
         ]);
+
+        
     }
     
     public function logout()

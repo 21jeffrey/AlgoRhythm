@@ -104,6 +104,10 @@ class ProcessSubmissionJob implements ShouldQueue
 
         if ($this->submission->user) {
             $this->submission->user->increment('points', $finalScore);
+            $this->submission->user->updateStreak();
+
+            $this->submission->user->awardEligibleBadges();
+            
         }
     }
 }

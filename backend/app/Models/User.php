@@ -24,6 +24,10 @@ class User extends Authenticatable
         'email',
         'password',
         'avatar_image',
+        'points',
+        'current_streak',
+        'last_activity_date',
+
     ];
 
     /**
@@ -56,9 +60,52 @@ public function sendPasswordResetNotification($token) {
 public function badges()
 {
     return $this->belongsToMany(\App\Models\Badge::class, 'learner_badge', 'learner_id', 'badge_id')
+                ->using(\App\Models\LearnerBadge::class)
                 ->withTimestamps()
                 ->withPivot('awarded_at');
 }
+
+    public function updateStreak()
+    {
+        $today = now()->format('Y-m-d');
+        $yesterday = now()->subDay()->format('Y-m-d');
+        
+        if (!$this->last_activity_date) {
+            $this->current_streak = 1;
+        } elseif ($this->last_activity_date === $today) {
+            return;
+        } elseif ($this->last_activity_date === $yesterday) {
+            $this->current_streak += 1;
+        } else {
+            $this->current_streak = 1;
+        }
+        
+        $this->last_activity_date = $today;
+        $this->save();
+    }
+    
+    public function awardEligibleBadges()
+    {
+        $unearnedBadges = Badge::whereNotIn('id', $this->badges()->pluck('id'))->get();
+        
+        foreach ($unearnedBadges as $badge) {
+            if ($this->meetsBadgeCriteria($badge)) {
+                $this->badges()->attach($badge->id, ['awarded_at' => now()]);
+            }
+        }
+    }
+    
+    public function meetsBadgeCriteria(Badge $badge)
+    {
+        switch ($badge->threshold_type) {
+            case 'points':
+                return $this->points >= $badge->threshold_value;
+            case 'streak':
+                return $this->current_streak >= $badge->threshold_value;
+            default:
+                return false;
+        }
+    }
 
 public function leaderboard()
 {

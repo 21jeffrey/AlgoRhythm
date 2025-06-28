@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Badge;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
+use App\Models\User;
 
 
 class BadgeController extends Controller
@@ -112,7 +113,34 @@ class BadgeController extends Controller
     public function myBadges()
     {
         $user = Auth::user();
-        $badges = $user->badges()->with('pivot')->get(); 
-        return response()->json($badges);
+        return $user->badges()->withPivot('awarded_at')->get();
+    }
+
+    public function newBadges()
+    {
+        $user = Auth::user();
+        $lastChecked = $user->badges()->last_badge_check ?? now()->subDay();
+
+        $newBadges = $user->badges()
+            ->wherePivot('awarded_at', '>', $lastChecked)
+            ->withPivot('awarded_at')
+            ->get();
+        
+        $user->last_badge_check = now();
+        $user->save();
+
+        return response()->json($newBadges);    
+    }
+
+    public function newBadgeCount()
+    {
+        $user = Auth::user();
+        $lastChecked = $user->badges()->last_badge_check ?? now()->subDay();
+
+        $count = $user->badges()
+            ->wherePivot('awarded_at', '>', $lastChecked)
+            ->count();
+        
+        return response()->json(['count' => $count]);
     }
 }
