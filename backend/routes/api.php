@@ -56,11 +56,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/submissions/{id}', [SubmissionController::class, 'show']);
 });
 
-<<<<<<< HEAD
 Route::apiResource('badges', BadgeController::class);
 
-=======
->>>>>>> 09c79a52065076a8c987f3a38bfdaf56d318077d
 /*Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');*/
