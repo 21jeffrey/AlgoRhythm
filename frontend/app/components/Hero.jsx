@@ -27,7 +27,7 @@ const Hero = () => {
       </div>
 
       {/* Foreground Content */}
-      <div className="relative z-10 max-w-[800px] mt-[-96px] w-full h-screen mx-auto text-center flex flex-col justify-center">
+      <div className="relative z-10 max-w-[800px] w-full min-h-screen mx-auto text-center flex flex-col justify-center pt-28 pb-12">
         <p className='text-purple-300 font-bold p-2'>GROWING WITH ALGORHYTHM</p>
         <h1 className='md:text-7xl sm:text-6xl text-4xl font-bold md:py-6'>Grow with code.</h1>
         
@@ -55,12 +55,13 @@ const Hero = () => {
         </Link>
         
         {/* Scroll to Features Button */}
-        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2">
+        <div className="mt-8 flex justify-center">
           <button
             onClick={scrollToFeatures}
-            className="flex flex-col items-center text-purple-300 hover:text-white transition duration-300 animate-bounce"
+            className="flex flex-col items-center px-4 py-2 border-2 border-purple-400 rounded-xl bg-black/40 text-purple-300 hover:bg-purple-600 hover:text-white transition duration-300 shadow-md animate-bounce"
+            style={{backdropFilter: 'blur(4px)'}}
           >
-            <span className="text-sm mb-2">Explore Features</span>
+            <span className="text-sm mb-1">Explore Features</span>
             <ChevronDown className="h-6 w-6" />
           </button>
         </div>

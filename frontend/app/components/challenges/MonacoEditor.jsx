@@ -1,62 +1,40 @@
+// app/components/challenges/MonacoEditor.jsx
 'use client';
 import Editor from '@monaco-editor/react';
 import { useState, useEffect } from 'react';
 
-const MonacoEditor = ({ language = 'python', initialCode = '', onChange }) => {
+export default function MonacoEditor({ language, initialCode = '', onChange, onSubmit }) {
   const [code, setCode] = useState(initialCode);
-  const [output, setOutput] = useState('');
+  
 
   const handleEditorChange = (value) => {
     setCode(value);
-    if (onChange) onChange(value);
+    onChange && onChange(value);
   };
 
-  const handleRunCode = () => {
-    setOutput(`Running ${language} code...\n\n${code}`);
+
+  const handleSubmit = () => {
+    if (onSubmit) onSubmit(code);
   };
 
-  useEffect(() => {
-    setCode(initialCode);
-  }, [initialCode]);
+  useEffect(() => setCode(initialCode), [initialCode]);
 
-return (
-    <div className="space-y-4">
-        <Editor
-            height="300px"
-            language={language}
-            value={code}
-            theme="vs-dark"
-            onChange={handleEditorChange}
-            options={{
-                fontSize: 14,
-                minimap: { enabled: false },
-                scrollBeyondLastLine: false,
-            }}
-        />
+  return (
+    <div className="space-y-4 flex flex-col h-full">
+      <Editor
+        height="450px"
+        language={language}
+        value={code}
+        theme="vs-dark"
+        onChange={handleEditorChange}
+        options={{ fontSize: 14, minimap: { enabled: false }, scrollBeyondLastLine: false }}
+      />
+      <div className="flex justify-end gap-4">
+        <button className="btn bg-violet-700 hover:bg-violet-600 text-white" onClick={handleSubmit}>
+          Submit Code
+        </button>
+      </div>
 
-        <div className="flex gap-4">
-            <button
-                className="btn  bg-violet-700 hover:bg-violet-600 text-white"
-                onClick={handleRunCode}
-            >
-                Run Code
-            </button>
-
-            <button
-                className="btn bg-violet-700 hover:bg-violet-600 text-white"
-                onClick={handleRunCode}
-            >
-                Submit Code
-            </button>
-        </div>
-
-        <div className="bg-base-200 p-4 rounded whitespace-pre-wrap text-sm">
-            <strong>Output Preview:</strong>
-            <pre>{output}</pre>
-        </div>
     </div>
-);
-};
-
-export default MonacoEditor;
-
+  );
+}

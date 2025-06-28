@@ -71,4 +71,10 @@ public function leaderboard()
     return response()->json($leaderboard);
 }
 
+public function submissions()
+{
+    return $this->hasMany(Submission::class);
+}
+
+
 }

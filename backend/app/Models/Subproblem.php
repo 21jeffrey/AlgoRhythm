@@ -14,7 +14,6 @@ class Subproblem extends Model
         'title',
         'description',
         'hint',
-        'expected_output',
         'test_cases'
     ];
 
@@ -23,4 +22,10 @@ class Subproblem extends Model
     {
         return $this->belongsTo(Challenge::class);
     }
+
+    public function submissions()
+    {
+    return $this->hasMany(Submission::class);
+    }
+
 }

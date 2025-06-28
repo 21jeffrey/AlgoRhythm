@@ -8,7 +8,6 @@ const SubproblemForm = ({ challengeId, subproblem, onClose, onSuccess }) => {
     title: '',
     description: '',
     hint: '',
-    expected_output: '',
     test_cases: ''
   });
 
@@ -21,7 +20,6 @@ const SubproblemForm = ({ challengeId, subproblem, onClose, onSuccess }) => {
         title: subproblem.title || '',
         description: subproblem.description || '',
         hint: subproblem.hint || '',
-        expected_output: subproblem.expected_output || '',
         test_cases: JSON.stringify(subproblem.test_cases || [], null, 2)
       });
     } else {
@@ -29,7 +27,6 @@ const SubproblemForm = ({ challengeId, subproblem, onClose, onSuccess }) => {
         title: '',
         description: '',
         hint: '',
-        expected_output: '',
         test_cases: ''
       });
     }
@@ -46,7 +43,6 @@ const SubproblemForm = ({ challengeId, subproblem, onClose, onSuccess }) => {
     const newErrors = {};
     if (!formData.title.trim()) newErrors.title = 'Title is required';
     if (!formData.description.trim()) newErrors.description = 'Description is required';
-    if (!formData.expected_output.trim()) newErrors.expected_output = 'Expected output is required';
     if (!formData.test_cases.trim()) newErrors.test_cases = 'Test cases are required';
     else {
       try {
@@ -107,7 +103,7 @@ const SubproblemForm = ({ challengeId, subproblem, onClose, onSuccess }) => {
       </h2>
 
       <form onSubmit={handleSubmit} className="space-y-4">
-        {['title', 'description', 'hint', 'expected_output'].map((field) => (
+        {['title', 'description', 'hint', ].map((field) => (
           <div key={field}>
             <label className="block mb-1 font-medium capitalize">{field.replace('_', ' ')}</label>
             {field === 'description' || field === 'hint' ? (

@@ -11,6 +11,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ChallengeController;
 use App\Http\Controllers\LeaderboardController;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\SubmissionController;
 
 Route::apiResource('challenges', ChallengeController::class);
 Route::get('challenges/{challenge}/subproblems', [ChallengeController::class, 'subproblemIndex']);
@@ -28,20 +29,25 @@ Route::post('/admin/register', [AdminController::class, 'register']);
 Route::post('/admin/login', [AdminController::class, 'login']);
 
 
+
+
 Route::middleware('auth:sanctum')->group(function () {
     // For regular users
-    Route::get('/user/profile', [AuthController::class, 'profile']);
+    Route::get('/profile', [AuthController::class, 'profile']);
     Route::post('/user/logout', [AuthController::class, 'logout']);
 
     // For admins
     Route::get('/admin/profile', [AdminController::class, 'profile']);
     Route::post('/admin/logout', [AdminController::class, 'logout']);
-
+    
+    // For user badges
     Route::get('/my-badges', [BadgeController::class, 'myBadges']);
+
+    // For user submissions
+    Route::post('/submissions', [SubmissionController::class, 'store']);
+    Route::get('/submissions/mine', [SubmissionController::class, 'mySubmissions']);
+    Route::get('/submissions/{id}', [SubmissionController::class, 'show']);
 });
-
-
-
 
 /*Route::get('/user', function (Request $request) {
     return $request->user();

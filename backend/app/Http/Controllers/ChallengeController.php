@@ -120,7 +120,6 @@ class ChallengeController extends Controller
             'title' => 'required|string',
             'description' => 'required|string',
             'hint' => 'nullable|string',
-            'expected_output' => 'required|string',
             'test_cases' => 'required|array',
         ]);
 
@@ -137,7 +136,6 @@ class ChallengeController extends Controller
             'title' => 'required|string',
             'description' => 'required|string',
             'hint' => 'nullable|string',
-            'expected_output' => 'required|string',
             'test_cases' => 'required|array',
         ]);
 

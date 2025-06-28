@@ -37,7 +37,14 @@ class UserController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $user = User::findOrFail($id);
+
+
+        if ($user->avatar_image) {
+            $user->avatar_image = Storage::disk('public')->url($user->avatar_image);
+        }
+
+        return response()->json($user);
     }
 
     /**

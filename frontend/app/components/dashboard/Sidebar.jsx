@@ -1,3 +1,4 @@
+'use client';
 import React from 'react';
 import { Home, User, Settings, LogOut, Users, BarChart } from 'lucide-react';
 import { useRouter } from 'next/navigation';
