@@ -21,7 +21,7 @@ function DashboardPage() {
       const token = Cookies.get('token');
       if (token) {
         try {
-          const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}api/user/profile`, {
+          const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}api/profile`, {
             headers: {
               Authorization: `Bearer ${token}`,
             },

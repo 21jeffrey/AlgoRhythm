@@ -2,6 +2,7 @@
 'use client';
 import dynamic from 'next/dynamic';
 import { useState, useEffect } from 'react';
+import Editor from '@monaco-editor/react';
 
 export default function MonacoEditor({ language, initialCode = '', onChange, onSubmit }) {
   const [code, setCode] = useState(initialCode);

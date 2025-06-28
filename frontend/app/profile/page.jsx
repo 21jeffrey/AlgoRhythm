@@ -9,7 +9,7 @@ export default function ProfilePage() {
 
   useEffect(() => {
     // Fetch user profile
-    fetch(`${process.env.NEXT_PUBLIC_API_URL}api/user/profile`, {
+    fetch(`${process.env.NEXT_PUBLIC_API_URL}api/profile`, {
       headers: {
         'Authorization': `Bearer ${localStorage.getItem('token')}`
       }

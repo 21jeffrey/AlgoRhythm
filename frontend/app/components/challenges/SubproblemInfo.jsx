@@ -17,7 +17,7 @@ export default function SubproblemInfo({
   isLoadingHistory,
   isProcessing,
   currentSubmissionId,
-  onPrev, // Add these two props for navigation
+  onPrev, 
   onNext
 }) {
 
