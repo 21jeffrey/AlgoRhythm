@@ -51,7 +51,7 @@ export default function HistoryPanel({ history, isLoading }) {
         {history.map((submission, index) => (
           <div 
             key={submission.id} 
-            className="border border-gray-300 rounded-lg p-3 bg-violet-700 shadow-sm hover:shadow-md transition-shadow"
+            className="border border-gray-300 rounded-lg p-3 bg-purple-700 shadow-sm hover:shadow-md transition-shadow"
           >
             <div className="flex justify-between items-start">
               <div className="flex-1">
@@ -82,16 +82,13 @@ export default function HistoryPanel({ history, isLoading }) {
                     <div className="bg-gray-800 px-2 py-1 rounded">
                       <span className="font-medium">Memory:</span> {submission.memory} KB
                     </div>
-                    <div className="bg-gray-800 px-2 py-1 rounded">
-                      <span className="font-medium">Score:</span> {submission.score}
-                    </div>
                   </div>
                 </div>
               </div>
             </div>
             
             <div className="mt-2">
-              <p className="text-xs font-medium text-gray-300 mb-1">Code:</p>
+              <p className="text-xs font-medium text-gray-100 mb-1">Code:</p>
               <pre className="bg-gray-800 text-gray-100 p-2 rounded text-xs overflow-auto">
                 {(submission.code)}
               </pre>

@@ -92,7 +92,8 @@ public function badges()
     
     public function awardEligibleBadges()
     {
-        $unearnedBadges = Badge::whereNotIn('id', $this->badges()->pluck('id'))->get();
+        $unearnedBadges = Badge::whereNotIn('id', $this->badges()->pluck('badges.id'))->get();
+
         
         foreach ($unearnedBadges as $badge) {
             if ($this->meetsBadgeCriteria($badge)) {

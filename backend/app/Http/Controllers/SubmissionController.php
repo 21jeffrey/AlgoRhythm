@@ -58,16 +58,18 @@ public function show($id)
      */
 public function mySubmissions(Request $request)
 {
-    $request->validate([
-        'subproblem_id' => 'required|integer|exists:subproblems,id'
-    ]);
-
-    $submissions = Submission::where('user_id', Auth::id())
-        ->where('subproblem_id', $request->subproblem_id)
+    $query = Submission::where('user_id', Auth::id())
         ->with('subproblem')
-        ->orderBy('created_at', 'desc')
-        ->get();
+        ->orderBy('created_at', 'desc');
 
-    return response()->json($submissions);
+    // Add condition if parameter exists
+    if ($request->has('subproblem_id')) {
+        $request->validate([
+            'subproblem_id' => 'integer|exists:subproblems,id'
+        ]);
+        $query->where('subproblem_id', $request->subproblem_id);
+    }
+
+    return response()->json($query->get());
 }
 }

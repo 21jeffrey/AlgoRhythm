@@ -1,12 +1,12 @@
+// app/challenges/[id]/attempt/page.jsx
 'use client';
 import { useParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import axios from 'axios';
 import toast from 'react-hot-toast';
-import Cookies from 'js-cookie';
-
 import SubproblemInfo from '@/app/components/challenges/SubproblemInfo';
 import MonacoEditor from '@/app/components/challenges/MonacoEditor';
+import Cookies from 'js-cookie';
 
 export default function AttemptPage() {
   const { id } = useParams();
@@ -16,18 +16,13 @@ export default function AttemptPage() {
   const [selectedLanguage, setSelectedLanguage] = useState('python');
   const [selectedTab, setSelectedTab] = useState('description');
   const [showHint, setShowHint] = useState(false);
-  const [userCode, setUserCode] = useState('');
   const [user, setUser] = useState(null);
   const [feedback, setFeedback] = useState(null);
-  const [submissionHistory, setSubmissionHistory] = useState([]);
-  const [isLoadingHistory, setIsLoadingHistory] = useState(false);
-  const [isProcessing, setIsProcessing] = useState(false);
-  const [currentSubmissionId, setCurrentSubmissionId] = useState(null);
+  const [submissionHistory, setSubmissionHistory] = useState([]); // New state for history
+  const [isLoadingHistory, setIsLoadingHistory] = useState(false); // Loading state
+  const [isProcessing, setIsProcessing] = useState(false); // Processing state for submissions
+  const [currentSubmissionId, setCurrentSubmissionId] = useState(null); // Store current submission ID
 
-  const currentSub = subproblems[currentIndex] || {};
-
-  // Toggle hint visibility
-  const toggleHint = () => setShowHint(!showHint);
 
   useEffect(() => {
     if (!id) return;
@@ -49,12 +44,10 @@ export default function AttemptPage() {
     const fetchUser = async () => {
       try {
         const token = Cookies.get('token');
-        if (!token) {
-          toast.error('Not authenticated');
-          return;
-        }
         const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}api/profile`, {
-          headers: { Authorization: `Bearer ${token}` },
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         });
         setUser(res.data);
       } catch {
@@ -66,102 +59,137 @@ export default function AttemptPage() {
     fetchUser();
   }, [id]);
 
-  const fetchSubmissionHistory = async () => {
-    if (!currentSub?.id || !user?.id) return;
+  // Reset states when switching subproblems
+  useEffect(() => {
+    setShowHint(false);
+    setFeedback(null);
+    fetchSubmissionHistory(); // Fetch history for new subproblem
+  }, [currentIndex]);
+
+  // Fetch submission history for current subproblem
+  const fetchSubmissionHistory = useCallback(async () => {
+    if (!user || !subproblems.length) return;
     
     setIsLoadingHistory(true);
     try {
       const token = Cookies.get('token');
+      const currentSub = subproblems[currentIndex];
+      
       const res = await axios.get(
-        `${process.env.NEXT_PUBLIC_API_URL}api/submissions/mine`,
+        `${process.env.NEXT_PUBLIC_API_URL}api/submissions/mine?subproblem_id=${currentSub.id}`,
         {
           headers: { Authorization: `Bearer ${token}` },
-          params: { subproblem_id: currentSub.id }
         }
       );
+      
       setSubmissionHistory(res.data);
     } catch (err) {
-      console.error('Failed to fetch history:', err);
       toast.error('Failed to load submission history');
+      console.error(err);
     } finally {
       setIsLoadingHistory(false);
     }
-  };
+  }, [user, subproblems, currentIndex]);
 
   useEffect(() => {
-    setShowHint(false);
-    setFeedback(null);
     fetchSubmissionHistory();
-  }, [currentIndex, currentSub?.id, user?.id]);
+  }, [fetchSubmissionHistory]);
 
-  useEffect(() => {
-    setUserCode(currentSub?.starter_code || '');
-  }, [currentSub]);
-
-  const handleSubmit = async () => {
+  const handleSubmit = async (code) => {
     if (!user) {
       toast.error('Please log in to submit.');
       return;
     }
-    if (!currentSub?.id) {
-      toast.error('No subproblem selected');
-      return;
-    }
 
-    setIsProcessing(true);
     try {
+      setIsProcessing(true);
+      setFeedback(null);
       const token = Cookies.get('token');
+      const currentSub = subproblems[currentIndex];
+
+      if (!code || code.trim() === '') {
+  
+  toast.error('Please enter  code before submitting.');
+  setIsProcessing(false);
+  return;
+      }
+      
+      // Submit code immediately
       const res = await axios.post(
         `${process.env.NEXT_PUBLIC_API_URL}api/submissions`,
         {
           subproblem_id: currentSub.id,
-          code: userCode,
+          code,
           language: selectedLanguage,
         },
         {
-          headers: { Authorization: `Bearer ${token}` },
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         }
       );
 
       const submission = res.data;
-      setCurrentSubmissionId(submission.id);
-
-      // Refetch the updated submission with output
-      const latest = await axios.get(
-        `${process.env.NEXT_PUBLIC_API_URL}api/submissions/${submission.id}`,
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-      
-      // Handle different output formats
-      let output = [];
-      if (typeof latest.data.output === 'string') {
-        try {
-          output = JSON.parse(latest.data.output);
-        } catch {
-          output = [{ result: latest.data.output }];
-        }
-      } else if (Array.isArray(latest.data.output)) {
-        output = latest.data.output;
-      }
-      
-      setFeedback(output);
+      setCurrentSubmissionId(submission.id); // Store submission ID
       setSelectedTab('feedback');
-      fetchSubmissionHistory();
-      toast.success('Submission complete!');
+      toast.success('Submission received! Evaluating...');
+      
+      // Wait 7 seconds before fetching feedback
+      setTimeout(async () => {
+        try {
+          // Fetch the full submission details after delay
+          const feedbackRes = await axios.get(
+            `${process.env.NEXT_PUBLIC_API_URL}api/submissions/${submission.submission_id}`,
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          );
+          
+          const fullSubmission = feedbackRes.data;
+          const outputs = fullSubmission.output ? JSON.parse(fullSubmission.output) : [];
+          
+          setFeedback({
+            passed: fullSubmission.passed,
+            score: fullSubmission.score,
+            time: fullSubmission.execution_time,
+            memory: fullSubmission.memory,
+            outputs: fullSubmission.output
+          });
+          
+          fetchSubmissionHistory(); // Refresh history
+          toast.success('Submission evaluated!');
+        } catch (err) {
+          toast.error('Failed to get submission results');
+          console.error(err);
+        } finally {
+          setIsProcessing(false);
+        }
+      }, 7000);
     } catch (err) {
-      console.error('Submission error:', err);
-      const errorMsg = err.response?.data?.message || 'Submission failed';
-      toast.error(errorMsg);
-    } finally {
       setIsProcessing(false);
+      
+      if (err.response) {
+        console.error('Response error:', err.response.data);
+        console.error('Status code:', err.response.status);
+        toast.error(`Submission failed: ${err.response.data.message || 'Validation error'}`);
+      } else {
+        toast.error('Submission failed!');
+        console.error(err);
+      }
     }
   };
+
+  const toggleHint = () => setShowHint((v) => !v);
 
   if (!challenge) return <p className="p-6">Loading challenge...</p>;
   if (!subproblems.length) return <p className="p-6">No subproblems found.</p>;
 
+  const currentSub = subproblems[currentIndex];
+
   return (
-    <div className="flex h-screen">
+    <div className="flex h-screen bg-gray-800 text-white">
       <SubproblemInfo
         subproblem={currentSub}
         currentIndex={currentIndex}
@@ -175,41 +203,27 @@ export default function AttemptPage() {
         isLoadingHistory={isLoadingHistory}
         isProcessing={isProcessing}
         currentSubmissionId={currentSubmissionId}
-        onPrev={() => currentIndex > 0 && setCurrentIndex(currentIndex - 1)}
-        onNext={() => currentIndex < subproblems.length - 1 && setCurrentIndex(currentIndex + 1)}
-        disablePrev={currentIndex === 0}
-        disableNext={currentIndex === subproblems.length - 1}
-        onRunCode={handleSubmit}  // Passed as run handler
+        selectedLanguage={selectedLanguage}
+        setSelectedLanguage={setSelectedLanguage}
+        setCurrentIndex={setCurrentIndex}
+        subproblemsLength={subproblems.length}
+        onNext={() => {
+          if (currentIndex < subproblems.length - 1) {}
+          setCurrentIndex((prev) => Math.min(prev + 1, subproblems.length - 1));
+        } }
+        onPrev={() => { 
+          if (currentIndex > 0) {
+            setCurrentIndex((prev) => Math.max(prev - 1, 0));
+          }
+        } }
+
       />
 
       <div className="w-full lg:w-[60%] flex flex-col">
-        <div className="p-4 border-b flex justify-between items-center">
-          <div>
-            <label className="font-semibold mr-2">Language:</label>
-            <select
-              className="select select-sm select-bordered"
-              value={selectedLanguage}
-              onChange={(e) => setSelectedLanguage(e.target.value)}
-            >
-              <option value="python">Python</option>
-              <option value="javascript">JavaScript</option>
-              <option value="java">Java</option>
-            </select>
-          </div>
-          <button
-            onClick={handleSubmit}
-            disabled={isProcessing}
-            className="btn btn-primary btn-sm"
-          >
-            {isProcessing ? 'Running...' : 'Run Code'}
-          </button>
-        </div>
-
         <div className="flex-1 overflow-hidden">
           <MonacoEditor
             language={selectedLanguage}
-            initialCode={userCode}
-            onChange={setUserCode}
+            onSubmit={handleSubmit}
           />
         </div>
       </div>

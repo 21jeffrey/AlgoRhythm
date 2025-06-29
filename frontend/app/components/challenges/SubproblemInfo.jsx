@@ -2,7 +2,7 @@
 'use client';
 import React from 'react';
 import FeedbackPanel from './FeedbackPanel';
-import HistoryPanel from './HistoryPanel'; // New component
+import HistoryPanel from './HistoryPanel';
 
 export default function SubproblemInfo({
   subproblem,
@@ -17,57 +17,58 @@ export default function SubproblemInfo({
   isLoadingHistory,
   isProcessing,
   currentSubmissionId,
-  onPrev, 
+  onPrev, // Add these as props
   onNext
 }) {
-
+  // Parse test cases
   const testCases = Array.isArray(subproblem?.test_cases) 
     ? subproblem.test_cases 
     : JSON.parse(subproblem?.test_cases || '[]');
+
   return (
     <div className="w-full lg:w-[40%] border-r flex flex-col">
-      <div className="flex justify-between items-center border-b p-4">
-        <div>
-          <h1 className="text-xl font-bold">
-            Problem {currentIndex + 1} of {total}
-          </h1>
-          <p className="text-gray-600">{subproblem.title}</p>
-        </div>
-      </div>
-
-      {/* Previous/Next Buttons */}
-      <div className="flex justify-between items-center px-4 py-2 border-b bg-base-100">
+        <h1 className="text-2xl font-bold mb-4">{subproblem.title}</h1>
+        
+        <div className="flex items-center px-4 py-2 text-purple-800 border-b bg-base-100">
         <button
-          className="btn btn-outline btn-sm"
+          className={`btn btn-sm btn-outline mr-2${currentIndex === 0 ? ' text-gray-400 cursor-not-allowed' : ''} cursor-pointer`}
           onClick={onPrev}
           disabled={currentIndex === 0}
+          type="button"
         >
           Previous
         </button>
+        <span className="text-sm text-gray-500 font-medium flex-1 text-center">
+          {`Subproblem ${currentIndex + 1} of ${total}`}
+        </span>
         <button
-          className="btn btn-outline btn-sm"
+          className={`btn btn-sm btn-outlinex${currentIndex === total - 1 ? ' text-gray-400 cursor-not-allowed' : ''} cursor-pointer`}
           onClick={onNext}
-          disabled={currentIndex === total - 1}
+          disabled={currentIndex === total - 1} 
+          type="button"
         >
           Next
         </button>
       </div>
+      
+      
 
-      <div className="tabs tabs-boxed bg-base-100 p-2">
+      <div className="tabs tabs-boxed  bg-base-100 p-2 ">
+        
         <button
-          className={`tab ${selectedTab === 'description' ? 'tab-active' : ''}`}
+          className={`tab ${selectedTab === 'description' ? 'tab-active' : ''} p-5 text-purple-700 cursor-pointer`}
           onClick={() => setSelectedTab('description')}
         >
           Description
         </button>
         <button
-          className={`tab ${selectedTab === 'feedback' ? 'tab-active' : ''}`}
+          className={`tab ${selectedTab === 'feedback' ? 'tab-active' : ''} p-5 text-purple-700 cursor-pointer`}
           onClick={() => setSelectedTab('feedback')}
         >
           Feedback
         </button>
         <button
-          className={`tab ${selectedTab === 'history' ? 'tab-active' : ''}`}
+          className={`tab ${selectedTab === 'history' ? 'tab-active' : ''} p-5 text-purple-700 cursor-pointer`}
           onClick={() => setSelectedTab('history')}
         >
           History
@@ -88,13 +89,13 @@ export default function SubproblemInfo({
             {/* Hint button */}
             <div className="mb-4">
               <button 
-                className="btn btn-outline btn-sm"
+                className="cursor-pointer bg-purple-800 text-white px-4 py-2 rounded hover:bg-purple-700 transition-colors focus:outline-none focus:ring-2 focus:ring-purple-500"
                 onClick={toggleHint}
               >
                 {showHint ? 'Hide Hint' : 'Show Hint'}
               </button>
               {showHint && (
-                <div className="mt-3 p-3 text-purple-500 border-l-4 border-yellow-400">
+                <div className="mt-3 p-3 text-purple-800 bg-yellow-50 border-l-4 border-yellow-400">
                   <p className="whitespace-pre-wrap">{subproblem.hint}</p>
                 </div>
               )}
@@ -105,7 +106,7 @@ export default function SubproblemInfo({
               <h3 className="text-lg font-bold mb-3">Test Cases</h3>
               <div className="space-y-3">
                 {testCases.map((testCase, index) => (
-                  <div key={index} className="border rounded-lg p-3 ">
+                  <div key={index} className="border rounded-lg p-3 bg-purple-800">
                     <div className="grid grid-cols-2 gap-4">
                       <div>
                         <h4 className="font-medium mb-1">Input:</h4>

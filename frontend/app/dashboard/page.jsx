@@ -5,13 +5,16 @@ import DashboardStats from '../components/dashboard/DashboardStats';
 import RecentActivity from '../components/dashboard/RecentActivity';
 import axios from 'axios';
 import Cookies from 'js-cookie';
+import { useRouter } from 'next/navigation';
+import toast from 'react-hot-toast';
 
 function DashboardPage() {
+  const router = useRouter();
   const [user, setUser] = useState(null);
    useEffect(() => {
     const token = Cookies.get('token');
     if (!token) {
-      router.push('/app/login'); 
+      router.push('/login'); 
       toast.error('You must be logged in to access the admin dashboard.');
     }
   }, []);
