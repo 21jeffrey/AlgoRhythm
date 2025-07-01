@@ -6,22 +6,37 @@ export default function FriendsPage() {
   const [query, setQuery] = useState('');
   const [results, setResults] = useState([]);
   const [friends, setFriends] = useState([]);
+  const [allUsers, setAllUsers] = useState([]);
 
-  // Fetch current friends on mount
+  // Fetch current friends and all users on mount
   useEffect(() => {
+    // Fetch friends
     fetch(`${process.env.NEXT_PUBLIC_API_URL}api/friends`, {
       headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
     })
       .then(res => res.json())
       .then(data => setFriends(data));
+
+    // Fetch all users
+    fetch(`${process.env.NEXT_PUBLIC_API_URL}api/users`, {
+      headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+    })
+      .then(res => res.json())
+      .then(data => setAllUsers(data));
   }, []);
 
-  // Search users
-  const handleSearch = async () => {
-    if (!query.trim()) return;
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}api/users/search?query=${query}`);
-    const data = await res.json();
-    setResults(data);
+  // Search users (client-side from allUsers)
+  const handleSearch = () => {
+    if (!query.trim()) {
+      setResults([]);
+      return;
+    }
+    const lower = query.toLowerCase();
+    const filtered = allUsers.filter(u =>
+      (u.name && u.name.toLowerCase().includes(lower)) ||
+      (u.email && u.email.toLowerCase().includes(lower))
+    );
+    setResults(filtered);
   };
 
   // Add friend
@@ -30,7 +45,9 @@ export default function FriendsPage() {
       method: 'POST',
       headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
     });
-    setFriends([...friends, results.find(u => u.id === userId)]);
+    // Find user from allUsers (not just results)
+    const user = allUsers.find(u => u.id === userId);
+    if (user) setFriends([...friends, user]);
   };
 
   // Remove friend
@@ -67,39 +84,37 @@ export default function FriendsPage() {
             </button>
           </div>
 
-          {/* Search Results */}
-          {results.length > 0 && (
-            <div className="mb-8">
-              <h2 className="text-lg font-bold mb-2">Search Results</h2>
-              <ul className="space-y-3">
-                {results.map(user => (
-                  <li key={user.id} className="flex items-center gap-4 bg-gray-100 rounded-lg p-3 shadow">
-                    <img
-                      src={user.avatar_image || '/default-avatar.png'}
-                      alt={user.name}
-                      className="w-10 h-10 rounded-full object-cover border"
-                    />
-                    <span className="flex-1 font-medium">{user.name}</span>
-                    {isFriend(user.id) ? (
-                      <button
-                        onClick={() => handleRemoveFriend(user.id)}
-                        className="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600 transition"
-                      >
-                        Unadd Friend
-                      </button>
-                    ) : (
-                      <button
-                        onClick={() => handleAddFriend(user.id)}
-                        className="px-3 py-1 bg-green-500 text-white rounded hover:bg-green-600 transition"
-                      >
-                        Add Friend
-                      </button>
-                    )}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
+          {/* Search Results (show all users if no query, or filtered results) */}
+          <div className="mb-8">
+            <h2 className="text-lg font-bold mb-2">{query.trim() ? 'Search Results' : 'All Users'}</h2>
+            <ul className="space-y-3">
+              {(query.trim() ? results : allUsers).map(user => (
+                <li key={user.id} className="flex items-center gap-4 bg-gray-100 rounded-lg p-3 shadow">
+                  <img
+                    src={user.avatar_image || '/default-avatar.png'}
+                    alt={user.name}
+                    className="w-10 h-10 rounded-full object-cover border"
+                  />
+                  <span className="flex-1 font-medium">{user.name}</span>
+                  {isFriend(user.id) ? (
+                    <button
+                      onClick={() => handleRemoveFriend(user.id)}
+                      className="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600 transition"
+                    >
+                      Unadd Friend
+                    </button>
+                  ) : (
+                    <button
+                      onClick={() => handleAddFriend(user.id)}
+                      className="px-3 py-1 bg-green-500 text-white rounded hover:bg-green-600 transition"
+                    >
+                      Add Friend
+                    </button>
+                  )}
+                </li>
+              ))}
+            </ul>
+          </div>
 
           {/* Friends List */}
           <div>
