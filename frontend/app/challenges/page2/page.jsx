@@ -47,6 +47,12 @@ export default function ChallengesPage2() {
     router.push(`/challenges/${challengeId}/attempt`);
   };
 
+   const getImageUrl = (challenge) => {
+    if (!challenge.image) return '';
+    if (challenge.image.startsWith('http')) return challenge.image;
+    return `${process.env.NEXT_PUBLIC_API_URL}storage/${challenge.image}`;
+  };
+
   return (
     <div className="min-h-screen bg-black relative">
       {/* Aurora Background */}
@@ -94,15 +100,20 @@ export default function ChallengesPage2() {
                 <div>
                   <div className="flex items-center gap-2 mb-2">
                     <span className={`px-3 py-1 rounded-full text-xs font-bold ${
-                      challenge.difficulty === 'Easy'
+                      challenge.difficulty === 'beginner'
                         ? 'bg-green-100 text-green-700'
-                        : challenge.difficulty === 'Medium'
+                        : challenge.difficulty === 'intermediate'
                         ? 'bg-yellow-100 text-yellow-700'
                         : 'bg-red-100 text-red-700'
                     }`}>
                       {challenge.difficulty}
                     </span>
                   </div>
+                  <img
+          src={getImageUrl(challenge)}
+          alt={challenge.title}
+          className="object-contain h-40 w-full rounded"
+        />
                   <h3 className="font-bold text-lg mb-2 text-white">{challenge.title}</h3>
                   <p className="text-gray-300 mb-4 text-sm">
                     {challenge.description}

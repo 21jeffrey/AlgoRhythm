@@ -1,9 +1,9 @@
 'use client';
 import React from 'react';
-import BadgeList from '@/app/components/badges/BadgeList';
+import BadgeList from '@/components/badges/BadgeList';
 import { PlusCircleIcon } from '@heroicons/react/24/outline';
-import Modal from '@/app/components/Modal';
-import CreateBadgeForm from '@/app/components/badges/CreateBadgeForm';
+import Modal from '@/components/Modal';
+import CreateBadgeForm from '@/components/badges/CreateBadgeForm';
 import { useState } from 'react';
 
 const BadgesPage = () => {

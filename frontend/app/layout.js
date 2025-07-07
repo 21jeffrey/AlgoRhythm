@@ -1,6 +1,7 @@
 import './globals.css'
 import { Toaster } from 'react-hot-toast';
-import Navbar from './components/navbar';
+import Navbar from '@/components/navbar';
+
 
 const metadata = {
   title: 'AlgoRhythm',

@@ -4,9 +4,10 @@ import { useParams } from 'next/navigation';
 import { useEffect, useState, useCallback } from 'react';
 import axios from 'axios';
 import toast from 'react-hot-toast';
-import SubproblemInfo from '@/app/components/challenges/SubproblemInfo';
-import MonacoEditor from '@/app/components/challenges/MonacoEditor';
+import SubproblemInfo from '@/components/challenges/SubproblemInfo';
+import MonacoEditor from '@/components/challenges/MonacoEditor';
 import Cookies from 'js-cookie';
+import Swal from 'sweetalert2';
 
 const LANGUAGE_OPTIONS = [
   { value: 'python', label: 'Python' },
@@ -142,6 +143,7 @@ export default function AttemptPage() {
                 Authorization: `Bearer ${token}`,
               },
             }
+          
           );
           const fullSubmission = feedbackRes.data;
           const outputs = fullSubmission.output ? JSON.parse(fullSubmission.output) : [];
@@ -154,6 +156,22 @@ export default function AttemptPage() {
           });
           fetchSubmissionHistory();
           toast.success('Submission evaluated!');
+            const badgeRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL}api/badges/new`, {
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  });
+  const newBadges = await badgeRes.json();
+
+  if (newBadges.length > 0) {
+    Swal.fire({
+      icon: 'success',
+      title: 'Congratulations!',
+      text: `🎉 You earned ${newBadges.length} new badge(s)!`,
+      confirmButtonColor: '#3085d6',
+      confirmButtonText: 'Awesome!'
+    });
+  }
         } catch (err) {
           toast.error('Failed to get submission results');
           console.error(err);

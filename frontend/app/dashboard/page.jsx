@@ -1,8 +1,7 @@
 "use client";
 import React, { useEffect, useState } from 'react';
-import Sidebar from '../components/dashboard/Sidebar';
-import DashboardStats from '../components/dashboard/DashboardStats';
-import RecentActivity from '../components/dashboard/RecentActivity';
+import Sidebar from '@/components/dashboard/Sidebar';
+import DashboardStats from '@/components/dashboard/DashboardStats';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import { useRouter } from 'next/navigation';

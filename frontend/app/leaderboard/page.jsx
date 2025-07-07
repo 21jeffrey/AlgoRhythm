@@ -1,6 +1,6 @@
 'use client';
 import React , {useEffect , useState} from 'react';
-import Sidebar from '../components/dashboard/Sidebar';
+import Sidebar from '@/components/dashboard/Sidebar';
 
 function LeaderboardPage() {
   const [leaderboard, setLeaderboard] = useState([]);

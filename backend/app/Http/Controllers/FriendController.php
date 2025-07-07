@@ -81,6 +81,7 @@ class FriendController extends Controller
             'sender_id' => $sender->id,
             'sender_name' => $sender->name,
             'sender_email' => $sender->email,
+            'sender_avatar' => $sender->avatar_image,
             'created_at' => $friendship->created_at,
             'status' => $friendship->status,
         ];
@@ -101,6 +102,7 @@ public function sentRequests(Request $request)
             'recipient_id' => $recipient->id,
             'recipient_name' => $recipient->name,
             'recipient_email' => $recipient->email,
+            'recipient_avatar' => $recipient->avatar_image, 
             'created_at' => $friendship->created_at,
             'status' => $friendship->status,
         ];

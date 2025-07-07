@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { Users,  Award, TrendingUp, Calendar, Star , GraduationCapIcon, Flame} from 'lucide-react';
 import { AlertCircle } from 'lucide-react';
-import Loading from '@/app/components/Loading';
+import Loading from '@/components/Loading';
 
 export default function AnalyticsDashboard() {
   const [data, setData] = useState(null);

@@ -1,6 +1,6 @@
 'use client';
 import React from 'react';
-import Adminbar from '@/app/components/Adminbar';
+import Adminbar from '@/components/Adminbar';
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';

@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 import Cookies from 'js-cookie';
-import Cards from '@/app/components/dashboard/Cards'
+import Cards from '@/components/dashboard/Cards'
 
 function Page() {
   const [admin, setAdmin] = useState(null);

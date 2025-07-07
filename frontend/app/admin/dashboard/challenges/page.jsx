@@ -1,9 +1,9 @@
 'use client';
 import React, { useState } from 'react';
 import { PlusCircleIcon, ArrowPathIcon} from '@heroicons/react/24/outline';
-import Modal from '@/app/components/Modal';
-import ChallengeList from '@/app/components/challenges/ChallengeList';
-import CreateChallengeForm from '@/app/components/challenges/CreateChallengeForm';
+import Modal from '@/components/Modal';
+import ChallengeList from '@/components/challenges/ChallengeList';
+import CreateChallengeForm from '@/components/challenges/CreateChallengeForm';
 import { useRouter } from 'next/navigation';
 
 export default function ChallengesPage() {
