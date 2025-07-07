@@ -8,6 +8,7 @@ import Cookies from "js-cookie";
 const Navbar = () => {
   const [nav, setNav] = useState(false);
   const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true); // NEW
   const [dropdownOpen, setDropdownOpen] = useState(true);
   const dropdownRef = useRef(null);
   const pathname = usePathname();
@@ -44,7 +45,11 @@ const Navbar = () => {
         .then(res => res.json())
         .then(data => {
           if (data.user) setUser(data.user);
-        });
+          setLoading(false); // NEW
+        })
+        .catch(() => setLoading(false)); // NEW
+    } else {
+      setLoading(false); // NEW
     }
   }, []);
 
@@ -85,7 +90,9 @@ const Navbar = () => {
           <a href="#contact" className={linkClass("#contact")} onClick={handleScrollToContact}>Contact Us</a>
         </li>
         <li className="relative">
-          {user ? (
+          {loading ? (
+            <div style={{ width: 40, height: 40 }}></div>
+          ) : user ? (
             <div className="relative" ref={dropdownRef}>
               <button
                 className="p-0 border-2 border-purple-500 rounded-full bg-white hover:shadow-lg transition focus:outline-none focus:ring-2 focus:ring-purple-400"

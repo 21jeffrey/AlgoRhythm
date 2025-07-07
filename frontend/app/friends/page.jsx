@@ -2,6 +2,8 @@
 import { useEffect, useState } from 'react';
 import Cookies from 'js-cookie';
 import { useRouter } from 'next/navigation';
+import Sidebar from '../components/dashboard/Sidebar';
+import { UserIcon } from '@heroicons/react/24/outline';
 
 
 export default function FriendsPage() {
@@ -61,50 +63,79 @@ export default function FriendsPage() {
     });
     location.reload();
   };
-
   return (
-    <div className="p-6 space-y-6 max-w-xl mx-auto">
-      <h1 className="text-2xl font-bold">👥 Your Friends</h1>
-      <button
-        onClick={() =>  router.push('/friends/send')}
-        className="bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700 transition-colors"
-      > Add Friend</button>
-      <ul className="space-y-2">
-        {friends.map((f) => (
-          <li key={f.id} className="flex justify-between border p-2 rounded">
-            <span>{f.name}</span>
-            <button onClick={() => unfriend(f.id)} className="text-white bg-red-600 hover:bg-red-700 cursor-pointer px-3 py-1 rounded transition-colors">Unfriend</button>
-          </li>
-        ))}
-      </ul>
+    <div className="flex min-h-screen bg-black-200">
+      <Sidebar />
+      <main className="flex-1 p-8">
+        <div className="max-w-4xl mx-auto">
+          <h1 className="text-3xl font-bold mb-6 text-white">👥 Your Friends</h1>
+          <button
+            onClick={() => router.push('/friends/send')}
+            className="bg-purple-600 text-white px-6 py-2 rounded-lg hover:bg-purple-700 transition-colors font-semibold mb-8 shadow-lg"
+          >
+            + Add Friend
+          </button>
 
-<h2 className="text-xl font-semibold mt-6">📥 Incoming Requests</h2>
-<ul className="space-y-2">
-  {incoming.map((r) => (
-    <li key={r.id} className="flex justify-between border p-2 rounded">
-      <span>
-        From: {r.sender_name} ({r.sender_email})
-      </span>
-      <div className="space-x-2">
-        <button onClick={() => accept(r.sender_id)} className="text-green-600">Accept</button>
-        <button onClick={() => reject(r.sender_id)} className="text-yellow-600">Reject</button>
-      </div>
-    </li>
-  ))}
-</ul>
+          {/* Friends Grid */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mb-10">
+            {friends.length === 0 ? (
+              <div className="col-span-full text-gray-400 text-center">No friends yet.</div>
+            ) : (
+              friends.map((f) => (
+                <div key={f.id} className="bg-gray-800 rounded-xl shadow-lg p-6 flex flex-col items-center relative">
+                  <img
+                    src={f.avatar_image ? `${process.env.NEXT_PUBLIC_API_URL}storage/${f.avatar_image}` : '/default-avatar.png'}
+                    alt={f.name}
+                    className="w-20 h-20 rounded-full object-cover border-4 border-purple-500 mb-3"
+                    onError={e => { e.target.src = '/default-avatar.png'; }}
+                  />
+                  <div className="text-xl font-semibold text-white mb-1">{f.name}</div>
+                  <div className="text-gray-400 text-sm mb-1">{f.email || <span className='italic'>No email</span>}</div>
+                  <div className="text-gray-300 text-sm mb-3">Points: <span className="font-bold text-purple-400">{f.points ?? 0}</span></div>
+                  <button
+                    onClick={() => unfriend(f.id)}
+                    className="absolute top-3 right-3 text-xs bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded transition-colors shadow"
+                  >Unfriend</button>
+                </div>
+              ))
+            )}
+          </div>
 
+          {/* Incoming Requests */}
+          <h2 className="text-2xl font-semibold mt-10 mb-4 text-white">📥 Incoming Requests</h2>
+          <ul className="space-y-2 mb-10">
+            {incoming.length === 0 ? (
+              <li className="text-gray-400">No incoming requests.</li>
+            ) : (
+              incoming.map((r) => (
+                <li key={r.id} className="flex justify-between items-center bg-gray-700 p-4 rounded-lg shadow">
+                  <span className="text-white">
+                    From: <span className="font-semibold">{r.sender_name}</span> <span className="text-gray-400">({r.sender_email})</span>
+                  </span>
+                  <div className="space-x-2">
+                    <button onClick={() => accept(r.sender_id)} className="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded transition-colors">Accept</button>
+                    <button onClick={() => reject(r.sender_id)} className="bg-yellow-600 hover:bg-yellow-700 text-white px-3 py-1 rounded transition-colors">Reject</button>
+                  </div>
+                </li>
+              ))
+            )}
+          </ul>
 
-
-<h2 className="text-xl font-semibold mt-6">📤 Sent Requests</h2>
-<ul className="space-y-2">
-  {sent.map((r) => (
-    <li key={r.id} className="border p-2 rounded">
-      To: {r.recipient_name} ({r.recipient_email})
-    </li>
-  ))}
-</ul>
-
-
+          {/* Sent Requests */}
+          <h2 className="text-2xl font-semibold mt-10 mb-4 text-white">📤 Sent Requests</h2>
+          <ul className="space-y-2">
+            {sent.length === 0 ? (
+              <li className="text-gray-400">No sent requests.</li>
+            ) : (
+              sent.map((r) => (
+                <li key={r.id} className="bg-gray-700 p-4 rounded-lg shadow text-white">
+                  To: <span className="font-semibold">{r.recipient_name}</span> <span className="text-gray-400">({r.recipient_email})</span>
+                </li>
+              ))
+            )}
+          </ul>
+        </div>
+      </main>
     </div>
   );
 }
