@@ -8,11 +8,7 @@ use Illuminate\Support\Facades\Storage;
 
 class UserController extends Controller
 {
-    public function attemptedChallenges(Request $request){
-        $user = $request->user();
-        $challenges= $user->attemptedChallenges()->get();
-        return response()->json($challenges);
-    }
+
     public function index()
     {
         return response()->json(User::all());
@@ -21,18 +17,7 @@ class UserController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function addFriend(Request $request)
-    {
-        $user= $request->user();
-        $user->friends()->attach($FriendId);
-        return response()->json(['message'=> 'Friend Added']);
-    }
-    public function removeFriend(Request $request , $FriendId)
-{
-    $user = $request->user();
-    $user->friends()->detach($FriendId);
-    return response()->json(['message'=> 'Friend Removed']);
-}
+
     /**
      * Store a newly created resource in storage.
      */
@@ -64,17 +49,8 @@ class UserController extends Controller
         //
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function search(Request $request)
-    {
-        $query = $request->input('query');
-        $users = User::where('name','like', "%query")
-        ->orWhere('email','like', "%query")
-        ->get(['id', 'name', 'avatar_image']);
-        return response()->json($users);
-    }
+    
+   
 
     /**
      * Remove the specified resource from storage.
@@ -91,4 +67,17 @@ class UserController extends Controller
 
         return response()->json(['message' => 'User deleted']);
     }
+    
+     public function search(Request $request)
+    {
+       $search = $request->search;
+
+       $users = User::where(function($query) use ($search) {
+            $query->where('name', 'LIKE', "%{$search}%")
+                  ->orWhere('email', 'LIKE', "%{$search}%");
+        })->get();
+
+        return response()->json($users);
+    }
+
 }

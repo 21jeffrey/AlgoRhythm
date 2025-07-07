@@ -82,6 +82,7 @@ export default function HistoryPanel({ history, isLoading }) {
                     <div className="bg-gray-800 px-2 py-1 rounded">
                       <span className="font-medium">Memory:</span> {submission.memory} KB
                     </div>
+
                   </div>
                 </div>
               </div>

@@ -15,29 +15,41 @@ function DashboardPage() {
     const token = Cookies.get('token');
     if (!token) {
       router.push('/login'); 
-      toast.error('You must be logged in to access the admin dashboard.');
+      toast.error('You must be logged in to access the  dashboard.');
     }
   }, []);
 
-  useEffect(() => {
-    const fetchUser = async () => {
-      const token = Cookies.get('token');
-      if (token) {
-        try {
-          const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}api/profile`, {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          });
-          setUser(response.data.user);
-        } catch (error) {
-          console.error('Failed to fetch user:', error);
-        }
-      }
-    };
 
-    fetchUser();
-  }, []);
+useEffect(() => {
+  const fetchUser = async () => {
+    const token = Cookies.get('token');
+    if (token) {
+      try {
+        const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}api/profile`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        const user = response.data.user;
+
+        if (user && !user.email_verified_at) {
+          toast.error('Please verify your email to access the dashboard.');
+          router.push('/verify');
+        } else {
+          router.push('/dashboard');
+        }
+
+        setUser(user);
+      } catch (error) {
+        console.error('Failed to fetch user:', error);
+      }
+    }
+  };
+
+  fetchUser();
+}, []);
+
 
 
   return (

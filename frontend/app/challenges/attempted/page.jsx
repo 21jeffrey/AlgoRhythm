@@ -17,7 +17,6 @@ export default function AttemptedChallengesPage() {
     })
       .then(res => {
         if (res.status === 404) {
-          // Treat 404 as no attempted challenges
           setChallenges([]);
           setLoading(false);
           return null;
@@ -28,7 +27,11 @@ export default function AttemptedChallengesPage() {
         return res.json();
       })
       .then(data => {
-        if (data) setChallenges(data);
+        if (Array.isArray(data)) {
+          setChallenges(data);
+        } else if (data) {
+          setChallenges([]);
+        }
         setLoading(false);
       })
       .catch(err => {

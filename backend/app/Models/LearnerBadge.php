@@ -10,4 +10,10 @@ class LearnerBadge extends Pivot
     protected $casts = [
         'awarded_at' => 'datetime'
     ];
+
+    public function badge()
+{
+    return $this->belongsTo(Badge::class);
+}
+
 }

@@ -26,10 +26,14 @@ function Page() {
 
       if (response.data.status) {
         Cookies.set('token', response.data.token, { expires: 7 });
-        localStorage.setItem('token', response.data.token);
         toast.success("Login successful");
+        console.log('Login response:', response.data);
         setTimeout(() => {
-          window.location.href = '/dashboard';
+          if (response.data.is_verified) {
+  router.push('/dashboard');
+} else {
+  router.push('/verify');
+}
         }, 500);
       } else {
         toast.error(response.data.message || "Login failed");

@@ -63,6 +63,8 @@ class AuthController extends Controller
         'status' => true,
         'message' => 'Login successful',
         'token' => $token,
+        'user' => $user,
+        'is_verified' => $user->hasVerifiedEmail(),
     ]);
 }
 
@@ -73,9 +75,11 @@ class AuthController extends Controller
             return response()->json(['message' => 'Unauthenticated'], 401);
         }
 
+
         return response()->json([
             'status' => true,
             'user' => $user,
+            
         ]);
 
         
@@ -87,6 +91,47 @@ class AuthController extends Controller
         return response()->json([
             'status' => true,
             'message' => 'User logged out successfully',
+        ]);
+    }
+
+public function addFriend(Request $request)
+{
+    $user = $request->user();
+    $friendId = $request->input('friend_id');
+
+    if (!$friendId || $friendId == $user->id) {
+        return response()->json(['message' => 'Invalid friend ID'], 400);
+    }
+
+    // Prevent duplicates
+    if ($user->friends()->where('friend_id', $friendId)->exists()) {
+        return response()->json(['message' => 'Already friends'], 409);
+    }
+
+    $user->friends()->attach($friendId);
+
+    return response()->json(['message' => 'Friend added']);
+}
+
+
+    public function removeFriend(Request $request , $FriendId)
+{
+    $user = $request->user();
+    $user->friends()->detach($FriendId);
+    if (!$user->friends()->where('friend_id', $FriendId)->exists()) {
+        return response()->json(['message' => 'Friend not found'], 404);
+    }
+    return response()->json(['message'=> 'Friend Removed']);
+}
+
+    public function attemptedChallenges(Request $request)
+    {
+        $user = $request->user();
+        $attemptedChallenges = $user->attemptedChallenges()->get();
+
+        return response()->json([
+            'status' => true,
+            'attemptedChallenges' => $attemptedChallenges,
         ]);
     }
 

@@ -1,134 +1,109 @@
 'use client';
-import React, { useState, useEffect } from 'react';
-import Sidebar from '../components/dashboard/Sidebar';
+import { useEffect, useState } from 'react';
+import Cookies from 'js-cookie';
+import { useRouter } from 'next/navigation';
+
 
 export default function FriendsPage() {
-  const [query, setQuery] = useState('');
-  const [results, setResults] = useState([]);
   const [friends, setFriends] = useState([]);
+  const [incoming, setIncoming] = useState([]);
+  const [sent, setSent] = useState([]);
+  const token = Cookies.get('token');
+  const router = useRouter();
 
-  // Fetch current friends on mount
   useEffect(() => {
-    fetch(`${process.env.NEXT_PUBLIC_API_URL}api/friends`, {
-      headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
-    })
-      .then(res => res.json())
-      .then(data => setFriends(data));
-  }, []);
+    if (!token) return;
 
-  // Search users
-  const handleSearch = async () => {
-    if (!query.trim()) return;
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}api/users/search?query=${query}`);
-    const data = await res.json();
-    setResults(data);
-  };
+    const fetchAll = async () => {
+      const res1 = await fetch(`${process.env.NEXT_PUBLIC_API_URL}api/friends`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      const res2 = await fetch(`${process.env.NEXT_PUBLIC_API_URL}api/friend-requests/incoming`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      const res3 = await fetch(`${process.env.NEXT_PUBLIC_API_URL}api/friend-requests/sent`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
 
-  // Add friend
-  const handleAddFriend = async (userId) => {
-    await fetch(`${process.env.NEXT_PUBLIC_API_URL}api/friends/${userId}`, {
+      const data1 = await res1.json();
+      const data2 = await res2.json();
+      const data3 = await res3.json();
+
+      setFriends(data1);
+      setIncoming(data2);
+      setSent(data3);
+    };
+
+    fetchAll();
+  }, [token]);
+
+  const accept = async (id) => {
+    await fetch(`${process.env.NEXT_PUBLIC_API_URL}api/friend-request/${id}/accept`, {
       method: 'POST',
-      headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+      headers: { Authorization: `Bearer ${token}` },
     });
-    setFriends([...friends, results.find(u => u.id === userId)]);
+    location.reload();
   };
 
-  // Remove friend
-  const handleRemoveFriend = async (userId) => {
-    await fetch(`${process.env.NEXT_PUBLIC_API_URL}api/friends/${userId}`, {
+  const reject = async (id) => {
+    await fetch(`${process.env.NEXT_PUBLIC_API_URL}api/friend-request/${id}/reject`, {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    location.reload();
+  };
+
+  const unfriend = async (id) => {
+    await fetch(`${process.env.NEXT_PUBLIC_API_URL}api/friend/${id}`, {
       method: 'DELETE',
-      headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+      headers: { Authorization: `Bearer ${token}` },
     });
-    setFriends(friends.filter(f => f.id !== userId));
+    location.reload();
   };
-
-  // Helper to check if user is a friend
-  const isFriend = (userId) => friends.some(f => f.id === userId);
 
   return (
-    <div className="flex min-h-screen bg-black-200 text-white">
-      <Sidebar />
-      <main className="flex-1 p-6">
-        {/* Search Bar */}
-        <div className="max-w-2xl mx-auto">
-          <div className="flex items-center gap-2 mb-6">
-            <input
-              type="text"
-              placeholder="Search users by name or email"
-              className=" flex-1 px-4 py-2 border border-gray-300 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-purple-400"
-              value={query}
-              onChange={e => setQuery(e.target.value)}
-            />
-            <button
-              onClick={handleSearch}
-              className="px-6 py-2 bg-gradient-to-r from-purple-500 to-violet-700 text-white font-semibold rounded-r-lg shadow hover:from-purple-600 hover:to-violet-800 transition"
-            >
-              🔍 Search
-            </button>
-          </div>
+    <div className="p-6 space-y-6 max-w-xl mx-auto">
+      <h1 className="text-2xl font-bold">👥 Your Friends</h1>
+      <button
+        onClick={() =>  router.push('/friends/send')}
+        className="bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700 transition-colors"
+      > Add Friend</button>
+      <ul className="space-y-2">
+        {friends.map((f) => (
+          <li key={f.id} className="flex justify-between border p-2 rounded">
+            <span>{f.name}</span>
+            <button onClick={() => unfriend(f.id)} className="text-white bg-red-600 hover:bg-red-700 cursor-pointer px-3 py-1 rounded transition-colors">Unfriend</button>
+          </li>
+        ))}
+      </ul>
 
-          {/* Search Results */}
-          {results.length > 0 && (
-            <div className="mb-8">
-              <h2 className="text-lg font-bold mb-2">Search Results</h2>
-              <ul className="space-y-3">
-                {results.map(user => (
-                  <li key={user.id} className="flex items-center gap-4 bg-gray-100 rounded-lg p-3 shadow">
-                    <img
-                      src={user.avatar_image || '/default-avatar.png'}
-                      alt={user.name}
-                      className="w-10 h-10 rounded-full object-cover border"
-                    />
-                    <span className="flex-1 font-medium">{user.name}</span>
-                    {isFriend(user.id) ? (
-                      <button
-                        onClick={() => handleRemoveFriend(user.id)}
-                        className="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600 transition"
-                      >
-                        Unadd Friend
-                      </button>
-                    ) : (
-                      <button
-                        onClick={() => handleAddFriend(user.id)}
-                        className="px-3 py-1 bg-green-500 text-white rounded hover:bg-green-600 transition"
-                      >
-                        Add Friend
-                      </button>
-                    )}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
+<h2 className="text-xl font-semibold mt-6">📥 Incoming Requests</h2>
+<ul className="space-y-2">
+  {incoming.map((r) => (
+    <li key={r.id} className="flex justify-between border p-2 rounded">
+      <span>
+        From: {r.sender_name} ({r.sender_email})
+      </span>
+      <div className="space-x-2">
+        <button onClick={() => accept(r.sender_id)} className="text-green-600">Accept</button>
+        <button onClick={() => reject(r.sender_id)} className="text-yellow-600">Reject</button>
+      </div>
+    </li>
+  ))}
+</ul>
 
-          {/* Friends List */}
-          <div>
-            <h2 className="text-lg font-bold mb-2">Your Friends</h2>
-            {friends.length === 0 ? (
-              <p className="text-gray-500">You have no friends yet.</p>
-            ) : (
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                {friends.map(friend => (
-                  <div key={friend.id} className="flex items-center gap-4 bg-purple-100 rounded-lg p-3 shadow">
-                    <img
-                      src={friend.avatar_image || '/default-avatar.png'}
-                      alt={friend.name}
-                      className="w-10 h-10 rounded-full object-cover border"
-                    />
-                    <span className="flex-1 font-medium">{friend.name}</span>
-                    <button
-                      onClick={() => handleRemoveFriend(friend.id)}
-                      className="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600 transition"
-                    >
-                      Unadd Friend
-                    </button>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-        </div>
-      </main>
+
+
+<h2 className="text-xl font-semibold mt-6">📤 Sent Requests</h2>
+<ul className="space-y-2">
+  {sent.map((r) => (
+    <li key={r.id} className="border p-2 rounded">
+      To: {r.recipient_name} ({r.recipient_email})
+    </li>
+  ))}
+</ul>
+
+
     </div>
   );
 }

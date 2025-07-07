@@ -1,6 +1,9 @@
 'use client';	
 import React, { useEffect, useState } from 'react';
 import Sidebar from '../components/dashboard/Sidebar';
+import Cookies from 'js-cookie';
+import { FireIcon } from '@heroicons/react/24/outline';
+import Loading from '@/app/components/Loading';
 
 export default function ProfilePage() {
   const [user, setUser] = useState(null);
@@ -11,7 +14,7 @@ export default function ProfilePage() {
     // Fetch user profile
     fetch(`${process.env.NEXT_PUBLIC_API_URL}api/profile`, {
       headers: {
-        'Authorization': `Bearer ${localStorage.getItem('token')}`
+        'Authorization': `Bearer ${Cookies.get('token')}`
       }
     })
       .then(res => res.json())
@@ -33,7 +36,7 @@ export default function ProfilePage() {
     <div className="flex">
       <Sidebar />
       <main className="flex-1 p-10 bg-black-200">
-        <div className="text-center text-xl">Loading...</div>
+        <div className="text-center text-xl"><Loading/></div>
       </main>
     </div>
   );
@@ -54,6 +57,14 @@ export default function ProfilePage() {
               <div className="text-2xl font-semibold">{user.name}</div>
               <div className="text-gray-400">{user.email}</div>
             </div>
+            <div className='ml-auto jusify-end'>
+              <div className="text-gray-400">
+                <span className="font-semibold text-red-500 flex"> {user.current_streak} <FireIcon className='w-5 h-5'/></span> 
+              </div>
+              <div className="text-gray-400">
+                <span className="font-semibold">Points:</span> {user.points || 0}
+              </div>
+            </div>
           </div>
         )}
         <section>
@@ -67,7 +78,7 @@ export default function ProfilePage() {
                   <img
                     src={badge.image ? `${process.env.NEXT_PUBLIC_API_URL}storage/${badge.image}` : '/default-badge.png'}
                     alt={badge.name}
-                    className="w-16 h-16 mb-2 rounded-full object-cover border-2 border-white"
+                    className="w-25 h-20 mb-2 rounded-full object-cover "
                   />
                   <div className="font-bold text-lg text-white">{badge.name}</div>
                   <div className="text-gray-200 text-sm text-center">{badge.description}</div>

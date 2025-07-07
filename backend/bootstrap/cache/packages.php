@@ -1,4 +1,11 @@
 <?php return array (
+  'hootlex/laravel-friendships' => 
+  array (
+    'providers' => 
+    array (
+      0 => 'Hootlex\\Friendships\\FriendshipsServiceProvider',
+    ),
+  ),
   'laravel/pail' => 
   array (
     'providers' => 

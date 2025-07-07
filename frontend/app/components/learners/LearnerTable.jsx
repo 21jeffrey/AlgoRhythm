@@ -3,13 +3,23 @@ import React, { useEffect, useState } from 'react';
 import Swal from 'sweetalert2';
 import axios from 'axios';
 import toast from 'react-hot-toast';
+import Loading from '../Loading';
 
 function LearnerTable() {
   const [users, setUsers] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    setLoading(true);
     axios.get(`${process.env.NEXT_PUBLIC_API_URL}api/users`)
-      .then(res => setUsers(res.data))
+      .then(res => {
+        if (res.data.error) {
+          toast.error(res.data.error);
+        } else {
+          setUsers(res.data);
+        }
+        setLoading(false);
+      })
       .catch(err => {
         console.error(err);
         toast.error('Failed to fetch learners');
@@ -38,6 +48,10 @@ function LearnerTable() {
     }
   });
 };
+
+  if (loading) {
+    return <Loading />
+  }
 
   return (
     <div className="overflow-x-auto">

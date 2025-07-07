@@ -135,7 +135,6 @@ export default function SubproblemInfo({
         {selectedTab === 'feedback' && (
           <FeedbackPanel 
             feedback={feedback} 
-            subproblem={subproblem}
             isProcessing={isProcessing}
             submissionId={currentSubmissionId}
           />

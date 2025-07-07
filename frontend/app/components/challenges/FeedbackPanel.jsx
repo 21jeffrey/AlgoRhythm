@@ -1,26 +1,23 @@
 // components/challenges/FeedbackPanel.jsx
 'use client';
-// import { useEffect, useState } from 'react';
+
 
 export default function FeedbackPanel({ 
   feedback, 
-  subproblem,
   isProcessing,
   submissionId 
 }) {
-  // Parse test cases from subproblem
-  const testCases = Array.isArray(subproblem?.test_cases) 
-    ? subproblem.test_cases 
-    : JSON.parse(subproblem?.test_cases || '[]');
 
+  
+  
   if (isProcessing) {
     return (
       <div className="p-4">
         <h3 className="font-semibold mb-2">Evaluating Submission...</h3>
         <div className="flex items-center space-x-2">
-          <div className="animate-pulse rounded-full bg-blue-400 h-4 w-4"></div>
-          <div className="animate-pulse rounded-full bg-blue-400 h-4 w-4 delay-100"></div>
-          <div className="animate-pulse rounded-full bg-blue-400 h-4 w-4 delay-200"></div>
+          <div className="animate-pulse rounded-full bg-purple-400 h-4 w-4"></div>
+          <div className="animate-pulse rounded-full bg-purple-400 h-4 w-4 delay-100"></div>
+          <div className="animate-pulse rounded-full bg-purple-400 h-4 w-4 delay-200"></div>
           <span className="text-gray-600">Processing your code</span>
         </div>
       </div>
@@ -64,6 +61,7 @@ export default function FeedbackPanel({
           </span>
         </div>
       </div>
+
     </div>
   );
 }

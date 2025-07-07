@@ -2,14 +2,15 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Support\Facades\DB;
+use Hootlex\Friendships\Traits\Friendable;
 
-class User extends Authenticatable
+class User extends Authenticatable implements MustVerifyEmail
 
 {
     public function attemptedChallenges(){
@@ -18,7 +19,7 @@ class User extends Authenticatable
         ->withPivot('attempted_at');
     }
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable, HasApiTokens;
+    use HasFactory, Notifiable, HasApiTokens, Friendable;
 
     /**
      * The attributes that are mass assignable.
@@ -33,6 +34,7 @@ class User extends Authenticatable
         'points',
         'current_streak',
         'last_activity_date',
+        'email_verified_at',
 
     ];
 
@@ -130,5 +132,18 @@ public function submissions()
     return $this->hasMany(Submission::class);
 }
 
+public function checkFriendStatus(Request $request)
+{
+    $user = $request->user(); // authenticated user
+    $recipientId = $request->input('recipient_id');
 
+    // Make sure this is a User model instance
+    $recipient = User::findOrFail($recipientId);
+
+    if ($user->isFriendWith($recipient)) {
+        return response()->json(['status' => 'friends']);
+    } else {
+        return response()->json(['status' => 'not friends']);
+    }
+}
 }

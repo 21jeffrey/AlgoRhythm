@@ -1,4 +1,3 @@
-'use client';
 import './globals.css'
 import { Toaster } from 'react-hot-toast';
 import Navbar from './components/navbar';
@@ -15,8 +14,8 @@ export default function RootLayout({ children }) {
         <link rel="icon" href="/favicon.ico" type="image/x-icon" />
       </head>
       <body>
-        <Toaster position="top-center" reverseOrder={false} />
         <Navbar />
+        <Toaster position="top-center" reverseOrder={false} />
         {children}
       </body>
     </html>

@@ -3,6 +3,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { AiOutlineClose, AiOutlineMenu } from "react-icons/ai";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import Cookies from "js-cookie";
 
 const Navbar = () => {
   const [nav, setNav] = useState(false);
@@ -35,7 +36,7 @@ const Navbar = () => {
   }, []);
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
+    const token = Cookies.get("token");
     if (token) {
       fetch(`${process.env.NEXT_PUBLIC_API_URL}api/profile`, {
         headers: { 'Authorization': `Bearer ${token}` }
@@ -89,7 +90,7 @@ const Navbar = () => {
               <button
                 className="p-0 border-2 border-purple-500 rounded-full bg-white hover:shadow-lg transition focus:outline-none focus:ring-2 focus:ring-purple-400"
                 onClick={() => setDropdownOpen((open) => !open)}
-                onBlur={() => setTimeout(() => setDropdownOpen(false), 150)}
+                type="button"
               >
                 <img
                   src={user.avatar_image ? `${process.env.NEXT_PUBLIC_API_URL}storage/${user.avatar_image}` : '/default-avatar.png'}
@@ -110,28 +111,34 @@ const Navbar = () => {
                       <div className="text-gray-600 text-sm">{user.email}</div>
                     </div>
                   </div>
-                  <Link href="/profile" className="block mt-2 text-purple-700 font-semibold hover:underline">View Profile</Link>
+                  <Link
+                    href="/profile"
+                    className="block mt-2 text-purple-700 font-semibold hover:underline"
+                    onMouseDown={() => setDropdownOpen(false)}
+                  >
+                    View Profile
+                  </Link>
                 </div>
               )}
             </div>
           ) : (
             <Link href="/login">
-              <button className="bg-purple-600 hover:bg-purple-700 px-6 py-2 rounded-full font-semibold transition cursor-pointer hover:scale-105 active:scale-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-purple-500">
+              <button className="bg-purple-600 hover:bg-purple-700 px-6 py-2 rounded-full font-semibold transition cursor-pointer hover:scale-105 active:scale-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-purple-500" type="button">
                 Login
               </button>
             </Link>
           )}
         </li>
       </ul>
-      <div onClick={handleNav} className="block md:hidden cursor-pointer absolute top-6 right-6">
+      <div onClick={handleNav} className="block md:hidden cursor-pointer absolute top-6 right-6 z-50">
         {nav ? <AiOutlineClose size={20} /> : <AiOutlineMenu size={20} />}
       </div>
       {/* Mobile Menu */}
       <div
         className={
           nav
-            ? "fixed left-0 top-0 w-[60%] h-full border-r border-r-gray-900 bg-black ease-in-out duration-500 z-50 flex flex-col items-center pt-24"
-            : "fixed left-[-100%] z-50"
+            ? "fixed left-0 top-0 w-[60%] h-full border-r border-r-gray-900 bg-black ease-in-out duration-500 z-40 flex flex-col items-center pt-24"
+            : "fixed left-[-100%] z-40"
         }
         style={{backgroundColor: '#000'}}
       >
@@ -155,7 +162,7 @@ const Navbar = () => {
                 <button
                   className="p-0 border-2 border-purple-500 rounded-full bg-white hover:shadow-lg transition focus:outline-none focus:ring-2 focus:ring-purple-400 mx-auto"
                   onClick={() => setDropdownOpen((open) => !open)}
-                  onBlur={() => setTimeout(() => setDropdownOpen(false), 150)}
+                  type="button"
                 >
                   <img
                     src={user.avatar_image ? `${process.env.NEXT_PUBLIC_API_URL}storage/${user.avatar_image}` : '/default-avatar.png'}
@@ -182,7 +189,7 @@ const Navbar = () => {
               </div>
             ) : (
               <Link href="/login" onClick={handleCloseNav}>
-                <button className="bg-purple-600 hover:bg-purple-700 px-6 py-2 rounded-full font-semibold transition cursor-pointer hover:scale-105 active:scale-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-purple-500">
+                <button className="bg-purple-600 hover:bg-purple-700 px-6 py-2 rounded-full font-semibold transition cursor-pointer hover:scale-105 active:scale-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-purple-500" type="button">
                   Login
                 </button>
               </Link>

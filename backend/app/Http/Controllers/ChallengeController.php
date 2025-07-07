@@ -15,6 +15,7 @@ class ChallengeController extends Controller
     public function index()
     {
         return response()->json(Challenge::all());
+        
     }
 
     /**
@@ -105,6 +106,8 @@ class ChallengeController extends Controller
             'message' => 'Challenge deleted successfully',
         ]);
     }
+
+    
 
     public function subproblemIndex($challengeId)
     {

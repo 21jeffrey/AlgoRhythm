@@ -41,6 +41,8 @@ class ProcessSubmissionJob implements ShouldQueue
         $totalTime = 0;
         $totalMemory = 0;
         $passedCount = 0;
+        $hasRuntimeError = false;
+        $hasCompileError = false;
 
         // Loop through all test cases
         foreach ($testCases as $index => $case) {
@@ -64,10 +66,24 @@ class ProcessSubmissionJob implements ShouldQueue
             $result['test_case_input'] = $input;
             $result['test_case_expected'] = $expectedOutput;
             
-            // Check if this test case passed
+            // Check status and determine if test passed
+            $statusId = $result['status']['id'] ?? 0;
             $statusDesc = $result['status']['description'] ?? '';
-            $testPassed = ($statusDesc === 'Accepted');
+            
+            // Judge0 status IDs: 3=Accepted, 4=Wrong Answer, 5=Time Limit Exceeded, 
+            // 6=Compile Error, 7=Runtime Error (SIGSEGV), 8=Runtime Error (SIGXFSZ), 
+            // 9=Runtime Error (SIGFPE), 10=Runtime Error (SIGABRT), 11=Runtime Error (NZEC), 
+            // 12=Runtime Error (Other), 13=Internal Error, 14=Exec Format Error
+            
+            $testPassed = ($statusId === 3); // Only status 3 is "Accepted"
             $result['test_passed'] = $testPassed;
+            
+            // Track different types of errors
+            if ($statusId === 6) {
+                $hasCompileError = true;
+            } elseif (in_array($statusId, [7, 8, 9, 10, 11, 12])) {
+                $hasRuntimeError = true;
+            }
             
             $allResults[] = $result;
 
@@ -77,71 +93,111 @@ class ProcessSubmissionJob implements ShouldQueue
                 $allPassed = false;
             }
 
-            // Accumulate time and memory
-            $totalTime += $result['time'] ?? 0;
-            $totalMemory = max($totalMemory, $result['memory'] ?? 0);
+            // Only accumulate time and memory for successful executions
+            if ($statusId === 3 || $statusId === 4) { // Accepted or Wrong Answer
+                $totalTime += $result['time'] ?? 0;
+                $totalMemory = max($totalMemory, $result['memory'] ?? 0);
+            }
         }
+
+        // Determine overall status
+        $overallStatus = $this->determineOverallStatus($allPassed, $hasCompileError, $hasRuntimeError, $allResults);
 
         // Create a summary result
         $summaryResult = [
-            'status' => ['description' => $allPassed ? 'Accepted' : 'Wrong Answer'],
-            'time' => count($testCases) > 0 ? $totalTime / count($testCases) : 0, // Average time
-            'memory' => $totalMemory, // Max memory used
+            'status' => ['description' => $overallStatus],
+            'time' => count($testCases) > 0 ? $totalTime / count($testCases) : 0,
+            'memory' => $totalMemory,
             'all_test_results' => $allResults,
             'passed_count' => $passedCount,
             'total_count' => count($testCases),
-            'all_passed' => $allPassed
+            'all_passed' => $allPassed,
+            'has_runtime_error' => $hasRuntimeError,
+            'has_compile_error' => $hasCompileError
         ];
 
         $this->updateSubmission($summaryResult);
     }
 
-protected function normalizeData($data)
-{
-    // Handle empty arrays
-    if (is_array($data) && empty($data)) {
-        return ''; // Return empty string for empty arrays
-    }
-    
-    if (is_array($data)) {
-        return implode(' ', $data);
+    protected function determineOverallStatus($allPassed, $hasCompileError, $hasRuntimeError, $allResults)
+    {
+        if ($hasCompileError) {
+            return 'Compilation Error';
+        }
+        
+        if ($hasRuntimeError) {
+            return 'Runtime Error';
+        }
+        
+        if ($allPassed) {
+            return 'Accepted';
+        }
+        
+        // Check for other specific errors
+        foreach ($allResults as $result) {
+            $statusId = $result['status']['id'] ?? 0;
+            $statusDesc = $result['status']['description'] ?? '';
+            
+            if ($statusId === 5) {
+                return 'Time Limit Exceeded';
+            }
+            if ($statusId === 13) {
+                return 'Internal Error';
+            }
+            if ($statusId === 14) {
+                return 'Exec Format Error';
+            }
+        }
+        
+        return 'Wrong Answer';
     }
 
-    if (is_string($data)) {
-        // Remove surrounding quotes if present
-        $trimmed = trim($data, '"\'');
+    protected function normalizeData($data)
+    {
+        // Handle empty arrays
+        if (is_array($data) && empty($data)) {
+            return ''; // Return empty string for empty arrays
+        }
         
-        // Try to decode as JSON
-        $decoded = json_decode($trimmed, true);
-        if (json_last_error() === JSON_ERROR_NONE) {
-            if (is_array($decoded)) {
-                // Handle empty decoded arrays
-                if (empty($decoded)) {
-                    return '';
+        if (is_array($data)) {
+            return implode(' ', $data);
+        }
+
+        if (is_string($data)) {
+            // Remove surrounding quotes if present
+            $trimmed = trim($data, '"\'');
+            
+            // Try to decode as JSON
+            $decoded = json_decode($trimmed, true);
+            if (json_last_error() === JSON_ERROR_NONE) {
+                if (is_array($decoded)) {
+                    // Handle empty decoded arrays
+                    if (empty($decoded)) {
+                        return '';
+                    }
+                    return implode(' ', $decoded);
                 }
-                return implode(' ', $decoded);
             }
+
+            // Handle array-like strings directly
+            if (preg_match('/^\[\s*\]$/', $trimmed)) {
+                return ''; // Empty array string
+            }
+            
+            if (preg_match('/^\[.*\]$/', $trimmed)) {
+                $inside = trim($trimmed, '[]');
+                if (trim($inside) === '') {
+                    return ''; // Empty array content
+                }
+                $parts = array_map('trim', explode(',', $inside));
+                return implode(' ', $parts);
+            }
+            
+            return $trimmed;
         }
 
-        // Handle array-like strings directly
-        if (preg_match('/^\[\s*\]$/', $trimmed)) {
-            return ''; // Empty array string
-        }
-        
-        if (preg_match('/^\[.*\]$/', $trimmed)) {
-            $inside = trim($trimmed, '[]');
-            if (trim($inside) === '') {
-                return ''; // Empty array content
-            }
-            $parts = array_map('trim', explode(',', $inside));
-            return implode(' ', $parts);
-        }
-        
-        return $trimmed;
+        return $data;
     }
-
-    return $data;
-}
 
     protected function updateSubmission($result)
     {
@@ -165,16 +221,23 @@ protected function normalizeData($data)
                 'total_count' => $result['total_count'] ?? 0,
                 'average_time' => $time,
                 'max_memory' => $memory,
-                'final_score' => $finalScore
+                'final_score' => $finalScore,
+                'overall_status' => $result['status']['description'] ?? 'Unknown',
+                'has_runtime_error' => $result['has_runtime_error'] ?? false,
+                'has_compile_error' => $result['has_compile_error'] ?? false
             ],
             'test_cases' => []
         ];
 
         // Format each test case result for better readability
         foreach ($result['all_test_results'] ?? [] as $testResult) {
-            $detailedOutput['test_cases'][] = [
+            $statusId = $testResult['status']['id'] ?? 0;
+            $statusDesc = $testResult['status']['description'] ?? 'Unknown';
+            
+            $testCaseData = [
                 'test_case' => $testResult['test_case_index'] ?? 0,
-                'status' => $testResult['status']['description'] ?? 'Unknown',
+                'status' => $statusDesc,
+                'status_id' => $statusId,
                 'passed' => $testResult['test_passed'] ?? false,
                 'time' => $testResult['time'] ?? 0,
                 'memory' => $testResult['memory'] ?? 0,
@@ -184,6 +247,15 @@ protected function normalizeData($data)
                 'error' => $testResult['stderr'] ?? null,
                 'compile_output' => $testResult['compile_output'] ?? null
             ];
+            
+            // Add more detailed error information if available
+            if ($statusId === 6 && !empty($testResult['compile_output'])) {
+                $testCaseData['error_detail'] = $testResult['compile_output'];
+            } elseif (in_array($statusId, [7, 8, 9, 10, 11, 12]) && !empty($testResult['stderr'])) {
+                $testCaseData['error_detail'] = $testResult['stderr'];
+            }
+            
+            $detailedOutput['test_cases'][] = $testCaseData;
         }
 
         $this->submission->update([
