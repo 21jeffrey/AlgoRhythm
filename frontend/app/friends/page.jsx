@@ -10,6 +10,7 @@ export default function FriendsPage() {
   const [sent, setSent] = useState([]);
   const token = Cookies.get('token');
   const router = useRouter();
+  const [allUsers, setAllUsers] = useState([]);
 
   useEffect(() => {
     if (!token) return;
