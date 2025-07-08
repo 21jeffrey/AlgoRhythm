@@ -119,7 +119,7 @@ const Navbar = () => {
                     </div>
                   </div>
                   <Link
-                    href="/profile"
+                    href="/dashboard"
                     className="block mt-2 text-purple-700 font-semibold hover:underline"
                     onMouseDown={() => setDropdownOpen(false)}
                   >
@@ -190,7 +190,7 @@ const Navbar = () => {
                         <div className="text-gray-600 text-sm">{user.email}</div>
                       </div>
                     </div>
-                    <Link href="/profile" className="block mt-2 text-purple-700 font-semibold hover:underline">View Profile</Link>
+                    <Link href="/dashboard" className="block mt-2 text-purple-700 font-semibold hover:underline">View Profile</Link>
                   </div>
                 )}
               </div>
