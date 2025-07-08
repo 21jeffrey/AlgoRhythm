@@ -122,8 +122,11 @@ const Navbar = () => {
                   <Link
                     href="/dashboard"
                     className="block mt-2 text-purple-700 font-semibold hover:underline"
-                    onMouseDown={() => setDropdownOpen(false)}
-                  >
+                    onClick={() =>{
+                      setDropdownOpen(false);
+                      handleCloseNav();
+                    }}
+                    >
                     View Profile
                   </Link>
                 </div>
