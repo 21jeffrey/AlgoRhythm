@@ -3,7 +3,7 @@ import { useState } from 'react';
 import Cookies from 'js-cookie';
 import toast from 'react-hot-toast';
 import Swal from 'sweetalert2';
-import Sidebar from '../../components/dashboard/Sidebar';
+import Sidebar from '@/components/dashboard/Sidebar';
 import { useRouter } from 'next/navigation';
 
 export default function SendFriendPage() {

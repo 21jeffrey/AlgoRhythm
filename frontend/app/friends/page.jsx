@@ -2,8 +2,9 @@
 import { useEffect, useState } from 'react';
 import Cookies from 'js-cookie';
 import { useRouter } from 'next/navigation';
-import Sidebar from '../components/dashboard/Sidebar';
-import { UserIcon } from '@heroicons/react/24/outline';
+import Sidebar from '@/components/dashboard/Sidebar';
+import { FireIcon, UsersIcon } from '@heroicons/react/24/outline';
+import { ClockArrowDown, ClockArrowUp} from 'lucide-react';
 
 
 export default function FriendsPage() {
@@ -68,7 +69,7 @@ export default function FriendsPage() {
       <Sidebar />
       <main className="flex-1 p-8">
         <div className="max-w-4xl mx-auto">
-          <h1 className="text-3xl font-bold mb-6 text-white">👥 Your Friends</h1>
+          <h1 className="text-3xl font-bold mb-6 text-white flex gap-1"><UsersIcon className='w-7 h-10 text-purple-600'/> Your Friends</h1>
           <button
             onClick={() => router.push('/friends/send')}
             className="bg-purple-600 text-white px-6 py-2 rounded-lg hover:bg-purple-700 transition-colors font-semibold mb-8 shadow-lg"
@@ -92,6 +93,7 @@ export default function FriendsPage() {
                   <div className="text-xl font-semibold text-white mb-1">{f.name}</div>
                   <div className="text-gray-400 text-sm mb-1">{f.email || <span className='italic'>No email</span>}</div>
                   <div className="text-gray-300 text-sm mb-3">Points: <span className="font-bold text-purple-400">{f.points ?? 0}</span></div>
+                  <div className="text-gray-400 text-sm mb-3 flex gap-1">Streak: <span className="font-semibold text-red-500 flex">{f.current_streak} <FireIcon className='w-5 h-5'/></span> </div>
                   <button
                     onClick={() => unfriend(f.id)}
                     className="absolute top-3 right-3 text-xs bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded transition-colors shadow"
@@ -102,7 +104,7 @@ export default function FriendsPage() {
           </div>
 
           {/* Incoming Requests */}
-          <h2 className="text-2xl font-semibold mt-10 mb-4 text-white">📥 Incoming Requests</h2>
+          <h2 className="text-2xl font-semibold mt-10 mb-4 text-white flex gap-2"><ClockArrowDown className='w-6 h-8 text-purple-600'/> Incoming Requests</h2>
           <ul className="space-y-2 mb-10">
             {incoming.length === 0 ? (
               <li className="text-gray-400">No incoming requests.</li>
@@ -122,7 +124,7 @@ export default function FriendsPage() {
           </ul>
 
           {/* Sent Requests */}
-          <h2 className="text-2xl font-semibold mt-10 mb-4 text-white">📤 Sent Requests</h2>
+          <h2 className="text-2xl font-semibold mt-10 mb-4 text-white flex gap-2"><ClockArrowUp className='w-6 h-8 text-purple-600'/> Sent Requests</h2>
           <ul className="space-y-2">
             {sent.length === 0 ? (
               <li className="text-gray-400">No sent requests.</li>

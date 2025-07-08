@@ -95,20 +95,21 @@ public function sentRequests(Request $request)
 {
     $user = $request->user();
 
-    $requests = $user->getPendingFriendships()->map(function ($friendship) {
-        $recipient = User::find($friendship->recipient_id);
-        return [
-            'id' => $friendship->id,
-            'recipient_id' => $recipient->id,
-            'recipient_name' => $recipient->name,
-            'recipient_email' => $recipient->email,
-            'recipient_avatar' => $recipient->avatar_image, 
-            'created_at' => $friendship->created_at,
-            'status' => $friendship->status,
-        ];
-    });
+    $requests = \Hootlex\Friendships\Models\Friendship::where('sender_id', $user->id)
+        ->where('status', 0) // pending
+        ->with('recipient') // eager load recipient user
+        ->get()
+        ->map(function ($req) {
+            return [
+                'id' => $req->id,
+                'recipient_id' => $req->recipient_id,
+                'recipient_name' => $req->recipient->name,
+                'recipient_email' => $req->recipient->email,
+            ];
+        });
 
     return response()->json($requests);
 }
+
 
 }
