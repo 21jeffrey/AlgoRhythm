@@ -1,5 +1,5 @@
 import React from 'react'
-import LearnerTable from '@/app/components/learners/LearnerTable'
+import LearnerTable from '@/components/learners/LearnerTable'
 
 function page() {
   return (

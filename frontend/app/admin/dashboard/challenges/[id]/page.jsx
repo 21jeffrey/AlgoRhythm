@@ -3,8 +3,8 @@ import { useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { PencilSquareIcon, TrashIcon, PlusCircleIcon } from '@heroicons/react/24/outline';
-import Modal from '@/app/components/Modal';
-import SubproblemForm from '@/app/components/challenges/SubproblemForm';
+import Modal from '@/components/Modal';
+import SubproblemForm from '@/components/challenges/SubproblemForm';
 import toast from 'react-hot-toast';
 
 const SubproblemListPage = () => {

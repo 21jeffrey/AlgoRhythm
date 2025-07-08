@@ -104,6 +104,7 @@ const Navbar = () => {
                   alt="Profile"
                   className="w-10 h-10 rounded-full object-cover"
                 />
+                
               </button>
               {dropdownOpen && (
                 <div className="absolute right-0 mt-2 w-56 bg-white text-black rounded-lg shadow-lg z-50 p-4 min-w-max">

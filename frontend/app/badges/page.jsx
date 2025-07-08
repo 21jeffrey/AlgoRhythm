@@ -1,10 +1,12 @@
 'use client';
 import React , {useEffect , useState} from 'react';
-import Sidebar from '../components/dashboard/Sidebar';
+import Sidebar from '@/components/dashboard/Sidebar';
 import Cookies from 'js-cookie';
+
 
 function BadgesPage() {
   const[badges, setBadges] = useState([]);
+
   useEffect(()=>{
     const token = Cookies.get('token');
     fetch(`${process.env.NEXT_PUBLIC_API_URL}api/my-badges`,{

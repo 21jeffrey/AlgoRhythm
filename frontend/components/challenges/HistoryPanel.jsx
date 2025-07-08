@@ -37,11 +37,7 @@ export default function HistoryPanel({ history, isLoading }) {
     });
   };
 
-  // Truncate code for display
-  const truncateCode = (code, maxLength = 50) => {
-    if (code.length <= maxLength) return code;
-    return code.substring(0, maxLength) + '...';
-  };
+
 
   return (
     <div className="p-4">

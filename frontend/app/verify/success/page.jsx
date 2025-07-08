@@ -1,7 +1,7 @@
 'use client';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Suspense } from 'react';
-import Loading from '@/app/components/Loading';
+import Loading from '@/components/Loading';
 
 function SuccessContent() {
     const router = useRouter();

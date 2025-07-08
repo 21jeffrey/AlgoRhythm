@@ -1,9 +1,9 @@
 'use client';	
 import React, { useEffect, useState } from 'react';
-import Sidebar from '../components/dashboard/Sidebar';
+import Sidebar from '@/components/dashboard/Sidebar';
 import Cookies from 'js-cookie';
 import { FireIcon } from '@heroicons/react/24/outline';
-import Loading from '@/app/components/Loading';
+import Loading from '@/components/Loading';
 
 export default function ProfilePage() {
   const [user, setUser] = useState(null);
