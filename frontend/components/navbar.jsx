@@ -8,8 +8,8 @@ import Cookies from "js-cookie";
 const Navbar = () => {
   const [nav, setNav] = useState(false);
   const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true); // NEW
-  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [loading, setLoading] = useState(true); 
+  const [dropdownOpen, setDropdownOpen] = useState(true);
   const dropdownRef = useRef(null);
   const pathname = usePathname();
 
