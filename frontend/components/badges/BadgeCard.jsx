@@ -6,8 +6,8 @@ import Swal from 'sweetalert2';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 import { useCallback } from 'react';
-import Modal from '@/app/components/Modal';
-import UpdateBadgeForm from '@/app/components/badges/UpdateBadgeForm';
+import Modal from '@/components/Modal';
+import UpdateBadgeForm from '@/components/badges/UpdateBadgeForm';
 import { useState } from 'react';
 
 const BadgeCard = ({ badge, onDelete, onSuccess  }) => {

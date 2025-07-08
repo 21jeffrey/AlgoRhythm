@@ -64,15 +64,15 @@ export default function AttemptPage() {
 
     fetchChallengeData();
     fetchUser();
-  }, [id]);
+   }, [id]);
 
-  useEffect(() => {
+   useEffect(() => {
     setShowHint(false);
     setFeedback(null);
     fetchSubmissionHistory();
-  }, [currentIndex]);
+   }, [currentIndex]);
 
-  const fetchSubmissionHistory = useCallback(async () => {
+   const fetchSubmissionHistory = useCallback(async () => {
     if (!user || !subproblems.length) return;
     setIsLoadingHistory(true);
     try {
@@ -91,13 +91,13 @@ export default function AttemptPage() {
     } finally {
       setIsLoadingHistory(false);
     }
-  }, [user, subproblems, currentIndex]);
+   }, [user, subproblems, currentIndex]);
 
-  useEffect(() => {
+   useEffect(() => {
     fetchSubmissionHistory();
-  }, [fetchSubmissionHistory]);
+   }, [fetchSubmissionHistory]);
 
-  const handleSubmit = async (code) => {
+   const handleSubmit = async (code) => {
     if (!user) {
       toast.error('Please log in to submit.');
       return;
@@ -134,51 +134,49 @@ export default function AttemptPage() {
       setSelectedTab('feedback');
       toast.success('Submission received! Evaluating...');
 
-      setTimeout(async () => {
-        try {
-          const feedbackRes = await axios.get(
-            `${process.env.NEXT_PUBLIC_API_URL}api/submissions/${submission.submission_id}`,
-            {
-              headers: {
-                Authorization: `Bearer ${token}`,
-              },
-            }
-          
-          );
-          const fullSubmission = feedbackRes.data;
-          const outputs = fullSubmission.output ? JSON.parse(fullSubmission.output) : [];
-          setFeedback({
-            passed: fullSubmission.passed,
-            score: fullSubmission.score,
-            time: fullSubmission.execution_time,
-            memory: fullSubmission.memory,
-            outputs: fullSubmission.output
-          });
-          fetchSubmissionHistory();
-          toast.success('Submission evaluated!');
-            const badgeRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL}api/badges/new`, {
-    headers: {
-      Authorization: `Bearer ${token}`
-    }
-  });
-  const newBadges = await badgeRes.json();
+      try {
+        await new Promise((resolve) => setTimeout(resolve, 10000));
+        const feedbackRes = await axios.get(
+          `${process.env.NEXT_PUBLIC_API_URL}api/submissions/${submission.submission_id}`,
+          {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+          }
+        );
+        const fullSubmission = feedbackRes.data;
+        const outputs = fullSubmission.output ? JSON.parse(fullSubmission.output) : [];
+        setFeedback({
+          passed: fullSubmission.passed,
+          score: fullSubmission.score,
+          time: fullSubmission.execution_time,
+          memory: fullSubmission.memory,
+          outputs: outputs,
+        });
+        fetchSubmissionHistory();
+        toast.success('Submission evaluated!');
+        const badgeRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL}api/badges/new`, {
+          headers: {
+        Authorization: `Bearer ${token}`
+          }
+        });
+        const newBadges = await badgeRes.json();
 
-  if (newBadges.length > 0) {
-    Swal.fire({
-      icon: 'success',
-      title: 'Congratulations!',
-      text: `🎉 You earned ${newBadges.length} new badge(s)!`,
-      confirmButtonColor: '#3085d6',
-      confirmButtonText: 'Awesome!'
-    });
-  }
-        } catch (err) {
-          toast.error('Failed to get submission results');
-          console.error(err);
-        } finally {
-          setIsProcessing(false);
+        if (newBadges.length > 0) {
+          Swal.fire({
+        icon: 'success',
+        title: 'Congratulations!',
+        text: `🎉 You earned ${newBadges.length} new badge(s)!`,
+        confirmButtonColor: '#3085d6',
+        confirmButtonText: 'OK'
+          });
         }
-      }, 7000);
+      } catch (err) {
+        toast.error('Failed to get submission results');
+        console.error(err);
+      } finally {
+        setIsProcessing(false);
+      }
     } catch (err) {
       setIsProcessing(false);
       if (err.response) {

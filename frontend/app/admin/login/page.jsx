@@ -53,7 +53,7 @@ function Page() {
         >
           <div className="p-8">
             <h2 className="text-center text-3xl font-extrabold text-white">
-              Welcome Back
+              Admin Login
             </h2>
             <p className="mt-4 text-center text-gray-400">Sign in to continue</p>
 
